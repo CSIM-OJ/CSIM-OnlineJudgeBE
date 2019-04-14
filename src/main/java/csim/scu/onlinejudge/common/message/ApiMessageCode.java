@@ -16,6 +16,7 @@ public enum ApiMessageCode {
     UPDATE_STUDENT_PROBLEM_RATE_ERROR("404", "更新題目的難易度失敗"),
     // TeacherApi
     CREATE_COURSE_ERROR("404", "創建課程失敗"),
+    DELETE_COURSE_ERROR("404", "刪除課程失敗"),
     MAP_STUDENTLIST_COURSE_ERROR("404", "學生列表配對課程失敗"),
     DELETE_STUDENTLIST_COURSE_ERROR("404", "學生列表退出課程失敗"),
     MAP_ASSISTANTLIST_COURSE_ERROR("404", "助教列表配對課程失敗"),
@@ -40,8 +41,7 @@ public enum ApiMessageCode {
     // RankApi
     GET_CORRECT_RANK_ERROR("404", "取得正確解題學生排行失敗"),
     GET_BEST_CODE_RANK_ERROR("404", "取得最佳解答學生排行失敗");
-
-
+    
     private String code;
     private String desc;
 
