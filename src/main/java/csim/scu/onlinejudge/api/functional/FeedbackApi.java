@@ -1,13 +1,11 @@
 package csim.scu.onlinejudge.api.functional;
 
 import csim.scu.onlinejudge.api.base.BaseApi;
-import csim.scu.onlinejudge.common.exception.CourseNotFoundException;
-import csim.scu.onlinejudge.common.exception.StudentNotFoundException;
+import csim.scu.onlinejudge.common.exception.EntityNotFoundException;
 import csim.scu.onlinejudge.common.message.ApiMessageCode;
 import csim.scu.onlinejudge.common.message.Message;
 import csim.scu.onlinejudge.dao.domain.feedback.Feedback;
-import csim.scu.onlinejudge.service.CommonService;
-import csim.scu.onlinejudge.service.FeedbackService;
+import csim.scu.onlinejudge.manager.CourseManager;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +21,13 @@ import java.util.Map;
 @RestController
 public class FeedbackApi extends BaseApi {
 
+    private CourseManager courseManager;
+
+    @Autowired
+    public FeedbackApi(CourseManager courseManager) {
+        this.courseManager = courseManager;
+    }
+
     @ApiOperation(value = "新增回饋",
             notes = "取得courseId、content，並新增回饋")
     @PostMapping(value = "/addFeedback")
@@ -33,9 +38,9 @@ public class FeedbackApi extends BaseApi {
         String content = map.get("content");
         String account = getUserAccount(session);
         try {
-            commonService.addFeedback(Long.parseLong(courseId), account, content);
+            courseManager.addFeedback(Long.parseLong(courseId), account, content);
             message = new Message(ApiMessageCode.SUCCESS_STATUS, "");
-        } catch (ParseException | CourseNotFoundException | StudentNotFoundException e) {
+        } catch (ParseException | EntityNotFoundException e) {
             e.printStackTrace();
             message = new Message(ApiMessageCode.ADD_FEEDBACK_ERROR, "");
         }
@@ -48,9 +53,9 @@ public class FeedbackApi extends BaseApi {
     private Message getCourseFeedbacks(String courseId) {
         Message message;
         try {
-            List<Feedback> feedbacks = commonService.findFeedbacksByCourseId(Long.parseLong(courseId));
+            List<Feedback> feedbacks = courseManager.findFeedbacksByCourseId(Long.parseLong(courseId));
             message = new Message(ApiMessageCode.SUCCESS_STATUS, feedbacks);
-        } catch (CourseNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             e.printStackTrace();
             message = new Message(ApiMessageCode.GET_COURSE_FEEDBACK_ERROR, "");
         }

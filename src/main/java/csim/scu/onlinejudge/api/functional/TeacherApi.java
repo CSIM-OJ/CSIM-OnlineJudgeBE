@@ -6,10 +6,7 @@ import csim.scu.onlinejudge.api.base.BaseApi;
 import csim.scu.onlinejudge.common.exception.*;
 import csim.scu.onlinejudge.common.message.ApiMessageCode;
 import csim.scu.onlinejudge.common.message.Message;
-import csim.scu.onlinejudge.service.CommonService;
-import csim.scu.onlinejudge.service.CourseService;
-import csim.scu.onlinejudge.service.ProblemService;
-import csim.scu.onlinejudge.service.TeacherService;
+import csim.scu.onlinejudge.manager.CourseManager;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +21,13 @@ import java.util.Map;
 @RestController
 public class TeacherApi extends BaseApi {
 
+    private CourseManager courseManager;
+
+    @Autowired
+    public TeacherApi(CourseManager courseManager) {
+        this.courseManager = courseManager;
+    }
+
     @ApiOperation(value = "建立課程",
                   notes = "取得courseName、semester並建立課程")
     @PostMapping(value = "/createCourse")
@@ -34,9 +38,9 @@ public class TeacherApi extends BaseApi {
         String courseName = map.get("courseName");
         String semester = map.get("semester");
         try {
-            commonService.createCourse(account, courseName, semester);
+            courseManager.createCourse(account, courseName, semester);
             message = new Message(ApiMessageCode.SUCCESS_STATUS, "");
-        } catch (TeacherNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             e.printStackTrace();
             message = new Message(ApiMessageCode.CREATE_COURSE_ERROR, "");
 
@@ -49,8 +53,14 @@ public class TeacherApi extends BaseApi {
     @PostMapping(value = "/deleteCourse")
     private Message deleteCourse(@RequestBody Map<String, String> map) {
         String courseId = map.get("courseId");
-        courseService.deleteCourseById(Long.parseLong(courseId));
-        Message message = new Message(ApiMessageCode.SUCCESS_STATUS, "");
+        Message message;
+        try {
+            courseManager.deleteCourseById(Long.parseLong(courseId));
+            message = new Message(ApiMessageCode.SUCCESS_STATUS, "");
+        } catch (EntityNotFoundException e) {
+            e.printStackTrace();
+            message = new Message(ApiMessageCode.DELETE_COURSE_ERROR, "");
+        }
         return message;
     }
 
@@ -58,14 +68,14 @@ public class TeacherApi extends BaseApi {
             notes = "取得courseId、accountList，並加入課程")
     @PostMapping(value = "/addStudentList")
     private Message addStudentList(@RequestBody Map<String, Object> map) {
-        return BaseMethod.addStudentList(map, commonService);
+        return BaseMethod.addStudentList(map, courseManager);
     }
 
     @ApiOperation(value = "將學生列表退出課程",
             notes = "取得courseId、accountList，並退出課程")
     @PostMapping(value = "/deleteStudentList")
     private Message deleteStudentList(@RequestBody Map<String, Object> map) {
-        return BaseMethod.deleteStudentList(map, commonService);
+        return BaseMethod.deleteStudentList(map, courseManager);
     }
 
     @ApiOperation(value = "將助教列表加入課程",
@@ -76,9 +86,9 @@ public class TeacherApi extends BaseApi {
         String courseId = map.get("courseId").toString();
         List<String> accountList = (List<String>) map.get("accountList");
         try {
-            commonService.mapAssistantListToCourse(Long.parseLong(courseId), accountList);
+            courseManager.mapAssistantListToCourse(Long.parseLong(courseId), accountList);
             message = new Message(ApiMessageCode.SUCCESS_STATUS, "");
-        } catch (AssistantNotFoundException | CourseNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             message = new Message(ApiMessageCode.MAP_ASSISTANTLIST_COURSE_ERROR, "");
             e.printStackTrace();
         }
@@ -93,9 +103,9 @@ public class TeacherApi extends BaseApi {
         String courseId = map.get("courseId").toString();
         List<String> accountList = (List<String>) map.get("accountList");
         try {
-            commonService.deleteAssistantListFromCourse(Long.parseLong(courseId), accountList);
+            courseManager.deleteAssistantListFromCourse(Long.parseLong(courseId), accountList);
             message = new Message(ApiMessageCode.SUCCESS_STATUS, "");
-        } catch (AssistantNotFoundException | CourseNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             e.printStackTrace();
             message = new Message(ApiMessageCode.DELETE_ASSISTANTLIST_COURSE_ERROR, "");
         }
@@ -110,8 +120,8 @@ public class TeacherApi extends BaseApi {
 
         String account = getUserAccount(session);
         try {
-            message = new Message(ApiMessageCode.SUCCESS_STATUS, teacherService.getCoursesInfo(account));
-        } catch (TeacherNotFoundException e) {
+            message = new Message(ApiMessageCode.SUCCESS_STATUS, courseManager.getCoursesInfo(account));
+        } catch (EntityNotFoundException e) {
             e.printStackTrace();
             message = new Message(ApiMessageCode.GET_COURSE_INFO_ERROR, "");
         }

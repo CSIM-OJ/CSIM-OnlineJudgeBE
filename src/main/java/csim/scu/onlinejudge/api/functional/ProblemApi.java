@@ -2,19 +2,18 @@ package csim.scu.onlinejudge.api.functional;
 
 
 import csim.scu.onlinejudge.api.base.BaseApi;
-import csim.scu.onlinejudge.common.exception.CourseNotFoundException;
+import csim.scu.onlinejudge.common.exception.EntityNotFoundException;
 import csim.scu.onlinejudge.common.message.ApiMessageCode;
 import csim.scu.onlinejudge.common.message.Message;
-import csim.scu.onlinejudge.common.exception.ProblemNotFoundException;
 import csim.scu.onlinejudge.dao.domain.problem.Problem;
 import csim.scu.onlinejudge.dao.domain.problem.ProblemInfo;
 import csim.scu.onlinejudge.dao.domain.problem.TestCase;
-import csim.scu.onlinejudge.service.CommonService;
+import csim.scu.onlinejudge.manager.CourseManager;
+import csim.scu.onlinejudge.manager.ProblemManager;
 import csim.scu.onlinejudge.service.ProblemService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.DateFormat;
@@ -29,6 +28,19 @@ import java.util.Map;
 @RestController
 public class ProblemApi extends BaseApi {
 
+    private ProblemManager problemManager;
+    private ProblemService problemService;
+    private CourseManager courseManager;
+
+    @Autowired
+    public ProblemApi(ProblemManager problemManager,
+                      ProblemService problemService,
+                      CourseManager courseManager) {
+        this.problemManager = problemManager;
+        this.problemService = problemService;
+        this.courseManager = courseManager;
+    }
+
     @ApiOperation(value = "取得題目資訊",
             notes = "取得題目資訊")
     @GetMapping(value = "/getInfo")
@@ -37,7 +49,7 @@ public class ProblemApi extends BaseApi {
         try {
             ProblemInfo problemInfo = problemService.getInfo(Long.parseLong(problemId));
             message = new Message(ApiMessageCode.SUCCESS_STATUS, problemInfo);
-        } catch (ProblemNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             e.printStackTrace();
             message = new Message(ApiMessageCode.GET_PROBLEM_INFO_ERROR, "");
         }
@@ -51,9 +63,9 @@ public class ProblemApi extends BaseApi {
         Message message;
 
         try {
-            List<Problem> problems = commonService.findByCourseId(Long.parseLong(courseId));
+            List<Problem> problems = courseManager.findByCourseId(Long.parseLong(courseId));
             message = new Message(ApiMessageCode.SUCCESS_STATUS, problems);
-        } catch (CourseNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             e.printStackTrace();
             message = new Message(ApiMessageCode.GET_PROBLEMS_INFO_ERROR, "");
         }
@@ -80,11 +92,11 @@ public class ProblemApi extends BaseApi {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Date deadline = df.parse(deadlineStr);
         try {
-            commonService.createProblem(Long.parseLong(courseId), name, type, category,
+            courseManager.createProblem(Long.parseLong(courseId), name, type, category,
                     tag, description, inputDesc,
                     outputDesc, testCases, deadline);
             message = new Message(ApiMessageCode.SUCCESS_STATUS, "");
-        } catch (CourseNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             e.printStackTrace();
             message = new Message(ApiMessageCode.ADD_PROBLEM_ERROR, "");
         }
@@ -115,7 +127,7 @@ public class ProblemApi extends BaseApi {
                     type, category, tag, description,
                     inputDesc, outputDesc, testCases, deadline);
             message = new Message(ApiMessageCode.SUCCESS_STATUS, "");
-        } catch (ProblemNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             e.printStackTrace();
             message = new Message(ApiMessageCode.EDIT_PROBLEM_ERROR, "");
         }
@@ -129,9 +141,9 @@ public class ProblemApi extends BaseApi {
         Message message;
         String problemId = map.get("problemId");
         try {
-            problemService.deleteById(Long.parseLong(problemId));
+            problemService.delete(Long.parseLong(problemId));
             message = new Message(ApiMessageCode.SUCCESS_STATUS, "");
-        } catch (EmptyResultDataAccessException e) {
+        } catch (EntityNotFoundException e) {
             e.printStackTrace();
             message = new Message(ApiMessageCode.DELETE_PROBLEM_ERROR, "");
         }

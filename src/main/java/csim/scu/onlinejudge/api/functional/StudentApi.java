@@ -1,14 +1,13 @@
 package csim.scu.onlinejudge.api.functional;
 
 import csim.scu.onlinejudge.api.base.BaseApi;
-import csim.scu.onlinejudge.common.exception.CourseNotFoundException;
-import csim.scu.onlinejudge.common.exception.JudgeNotFoundException;
-import csim.scu.onlinejudge.common.exception.ProblemNotFoundException;
-import csim.scu.onlinejudge.common.exception.StudentNotFoundException;
+import csim.scu.onlinejudge.common.exception.*;
 import csim.scu.onlinejudge.common.message.ApiMessageCode;
 import csim.scu.onlinejudge.common.message.Message;
-import csim.scu.onlinejudge.service.CommonService;
-import csim.scu.onlinejudge.service.StudentService;
+import csim.scu.onlinejudge.manager.CommonManager;
+import csim.scu.onlinejudge.manager.CourseManager;
+import csim.scu.onlinejudge.manager.JudgeManager;
+import csim.scu.onlinejudge.manager.ProblemManager;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +21,22 @@ import java.util.Map;
 @RestController
 public class StudentApi extends BaseApi {
 
+    private CommonManager commonManager;
+    private CourseManager courseManager;
+    private JudgeManager judgeManager;
+    private ProblemManager problemManager;
+
+    @Autowired
+    public StudentApi(CommonManager commonManager,
+                      CourseManager courseManager,
+                      JudgeManager judgeManager,
+                      ProblemManager problemManager) {
+        this.commonManager = commonManager;
+        this.courseManager = courseManager;
+        this.judgeManager = judgeManager;
+        this.problemManager = problemManager;
+    }
+
     @ApiOperation(value = "更改學生密碼",
             notes = "先用原本的密碼(oriPassword)驗證，驗證成功後，才更換密碼(newPassword)")
     @PostMapping(value = "/changePassword")
@@ -33,7 +48,7 @@ public class StudentApi extends BaseApi {
         String oriPassword = map.get("oriPassword");
         String newPassword = map.get("newPassword");
         String userType = getUserType(session);
-        int code = commonService.updateUserPassword(account, oriPassword, newPassword, userType);
+        int code = commonManager.updateUserPassword(account, oriPassword, newPassword, userType);
         // code=-1 代表更新失敗
         if (code != -1) {
             message = new Message(ApiMessageCode.SUCCESS_STATUS, "");
@@ -52,8 +67,8 @@ public class StudentApi extends BaseApi {
 
         String account = getUserAccount(session);
         try {
-            message = new Message(ApiMessageCode.SUCCESS_STATUS, commonService.getStudentCoursesInfo(account));
-        } catch (StudentNotFoundException e) {
+            message = new Message(ApiMessageCode.SUCCESS_STATUS, courseManager.getStudentCoursesInfo(account));
+        } catch (EntityNotFoundException e) {
             e.printStackTrace();
             message = new Message(ApiMessageCode.GET_COURSE_LIST_ERROR, "");
         }
@@ -67,8 +82,8 @@ public class StudentApi extends BaseApi {
         String account = getUserAccount(session);
         Message message;
         try {
-            message = new Message(ApiMessageCode.SUCCESS_STATUS, commonService.findStudentCourseInfo(Long.parseLong(courseId), account));
-        } catch (StudentNotFoundException | JudgeNotFoundException | CourseNotFoundException e) {
+            message = new Message(ApiMessageCode.SUCCESS_STATUS, courseManager.findStudentCourseInfo(Long.parseLong(courseId), account));
+        } catch (EntityNotFoundException e) {
             e.printStackTrace();
             message = new Message(ApiMessageCode.GET_INFO_ERROR, "");
         }
@@ -91,8 +106,8 @@ public class StudentApi extends BaseApi {
 
         String account = getUserAccount(session);
         try {
-            message = new Message(ApiMessageCode.SUCCESS_STATUS, commonService.getStudentProblemInfo(Long.parseLong(courseId), type, isJudge, account));
-        } catch (CourseNotFoundException | StudentNotFoundException e) {
+            message = new Message(ApiMessageCode.SUCCESS_STATUS, problemManager.getStudentProblemInfo(Long.parseLong(courseId), type, isJudge, account));
+        } catch (EntityNotFoundException e) {
             e.printStackTrace();
             message = new Message(ApiMessageCode.GET_STUDENT_PROBLEM_INFO_ERROR, "");
         }
@@ -109,14 +124,14 @@ public class StudentApi extends BaseApi {
         String rate = map.get("rate");
         String account = getUserAccount(session);
         try {
-            int code = commonService.updateJudgeRateByProblemIdAndAccount(Double.parseDouble(rate), Long.parseLong(problemId), account);
+            int code = judgeManager.updateJudgeRateByProblemIdAndAccount(Double.parseDouble(rate), Long.parseLong(problemId), account);
             if (code != -1) {
                 message = new Message(ApiMessageCode.SUCCESS_STATUS, "");
             }
             else {
                 message = new Message(ApiMessageCode.UPDATE_STUDENT_PROBLEM_RATE_ERROR, "");
             }
-        } catch (ProblemNotFoundException | StudentNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             e.printStackTrace();
             message = new Message(ApiMessageCode.UPDATE_STUDENT_PROBLEM_RATE_ERROR, "");
         }

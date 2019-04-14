@@ -3,8 +3,7 @@ package csim.scu.onlinejudge.api.functional;
 import csim.scu.onlinejudge.api.base.BaseApi;
 import csim.scu.onlinejudge.common.message.ApiMessageCode;
 import csim.scu.onlinejudge.common.message.Message;
-import csim.scu.onlinejudge.service.CommonService;
-import csim.scu.onlinejudge.service.CourseService;
+import csim.scu.onlinejudge.manager.CourseManager;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +16,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CourseApi extends BaseApi {
 
+    private CourseManager courseManager;
+
+    @Autowired
+    public CourseApi(CourseManager courseManager) {
+        this.courseManager = courseManager;
+    }
+
     @ApiOperation(value = "取得所有課程資訊",
             notes = "取得所有課程資訊")
     @GetMapping(value = "/getCourses")
     private Message getCourses() {
         Message message;
         try {
-            message = new Message(ApiMessageCode.SUCCESS_STATUS, commonService.getCoursesInfo());
+            message = new Message(ApiMessageCode.SUCCESS_STATUS, courseManager.getCoursesInfo());
         } catch (Exception e) {
             e.printStackTrace();
             message = new Message(ApiMessageCode.GET_COURSES_INFO_ERROR, "");

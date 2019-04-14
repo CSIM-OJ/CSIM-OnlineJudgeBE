@@ -1,10 +1,10 @@
 package csim.scu.onlinejudge.api.functional;
 
 import csim.scu.onlinejudge.api.base.BaseApi;
-import csim.scu.onlinejudge.common.exception.CourseNotFoundException;
+import csim.scu.onlinejudge.common.exception.EntityNotFoundException;
 import csim.scu.onlinejudge.common.message.ApiMessageCode;
 import csim.scu.onlinejudge.common.message.Message;
-import csim.scu.onlinejudge.service.CommonService;
+import csim.scu.onlinejudge.manager.JudgeManager;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class RankApi extends BaseApi {
 
+    private JudgeManager judgeManager;
+
+    @Autowired
+    public RankApi(JudgeManager judgeManager) {
+        this.judgeManager = judgeManager;
+    }
+
     @ApiOperation(value = "取得正確解題的學生排行",
             notes = "取得courseId，來獲得正確解題的學生排行")
     @GetMapping(value = "/getCorrectRank")
@@ -24,8 +31,8 @@ public class RankApi extends BaseApi {
         Message message;
 
         try {
-            message = new Message(ApiMessageCode.SUCCESS_STATUS, commonService.getCorrectRank(Long.parseLong(courseId)));
-        } catch (CourseNotFoundException e) {
+            message = new Message(ApiMessageCode.SUCCESS_STATUS, judgeManager.getCorrectRank(Long.parseLong(courseId)));
+        } catch (EntityNotFoundException e) {
             e.printStackTrace();
             message = new Message(ApiMessageCode.GET_CORRECT_RANK_ERROR, "");
         }
@@ -39,8 +46,8 @@ public class RankApi extends BaseApi {
         Message message;
 
         try {
-            message = new Message(ApiMessageCode.SUCCESS_STATUS, commonService.getBestCodeRank(Long.parseLong(courseId)));
-        } catch (CourseNotFoundException e) {
+            message = new Message(ApiMessageCode.SUCCESS_STATUS, judgeManager.getBestCodeRank(Long.parseLong(courseId)));
+        } catch (EntityNotFoundException e) {
             e.printStackTrace();
             message = new Message(ApiMessageCode.GET_BEST_CODE_RANK_ERROR, "");
         }

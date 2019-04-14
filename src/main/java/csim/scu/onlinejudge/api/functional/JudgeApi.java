@@ -1,14 +1,11 @@
 package csim.scu.onlinejudge.api.functional;
 
 import csim.scu.onlinejudge.api.base.BaseApi;
-import csim.scu.onlinejudge.common.exception.JudgeNotFoundException;
-import csim.scu.onlinejudge.common.exception.ProblemNotFoundException;
-import csim.scu.onlinejudge.common.exception.StudentNotFoundException;
+import csim.scu.onlinejudge.common.exception.EntityNotFoundException;
 import csim.scu.onlinejudge.common.message.ApiMessageCode;
 import csim.scu.onlinejudge.common.message.Message;
 import csim.scu.onlinejudge.dao.domain.judge.Judge;
-import csim.scu.onlinejudge.service.CommonService;
-import csim.scu.onlinejudge.service.JudgeService;
+import csim.scu.onlinejudge.manager.JudgeManager;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +20,13 @@ import java.util.Map;
 @RestController
 public class JudgeApi extends BaseApi {
 
+    private JudgeManager judgeManager;
+
+    @Autowired
+    public JudgeApi(JudgeManager judgeManager) {
+        this.judgeManager = judgeManager;
+    }
+
     @ApiOperation(value = "批改代碼",
             notes = "取得ProblemId、code、language，並進行批改代碼")
     @PostMapping(value = "/judgeCode")
@@ -34,9 +38,9 @@ public class JudgeApi extends BaseApi {
         String code = map.get("code");
         String language = map.get("language");
         try {
-            commonService.judgeCode(Long.parseLong(problemId), code, language, account);
+            judgeManager.judgeCode(Long.parseLong(problemId), code, language, account);
             message = new Message(ApiMessageCode.SUCCESS_STATUS, "");
-        } catch (JudgeNotFoundException | ProblemNotFoundException | StudentNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             e.printStackTrace();
             message = new Message(ApiMessageCode.JUDGE_CODE_ERROR, "");
         }
@@ -51,9 +55,9 @@ public class JudgeApi extends BaseApi {
 
         String account = getUserAccount(session);
         try {
-            Judge judge = commonService.findByProblemIdAndStudentAccount(Long.parseLong(problemId), account);
+            Judge judge = judgeManager.findByProblemIdAndStudentAccount(Long.parseLong(problemId), account);
             message = new Message(ApiMessageCode.SUCCESS_STATUS, judge);
-        } catch (ProblemNotFoundException | StudentNotFoundException | JudgeNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             e.printStackTrace();
             message = new Message(ApiMessageCode.GET_JUDGED_INFO_ERROR, "");
         }
@@ -68,11 +72,11 @@ public class JudgeApi extends BaseApi {
 
         String account = getUserAccount(session);
         try {
-            boolean isExist = commonService.existByProblemIdAndStudentAccount(Long.parseLong(problemId), account);
+            boolean isExist = judgeManager.existByProblemIdAndStudentAccount(Long.parseLong(problemId), account);
             Map<String, Boolean> map = new HashMap<>();
             map.put("judged", isExist);
             message = new Message(ApiMessageCode.SUCCESS_STATUS, map);
-        } catch (ProblemNotFoundException | StudentNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             e.printStackTrace();
             message = new Message(ApiMessageCode.CHECK_JUDGE_ERROR, "");
         }
@@ -86,9 +90,9 @@ public class JudgeApi extends BaseApi {
         Message message;
         String problemId = map.get("problemId");
         try {
-            commonService.judgeCopy(Long.parseLong(problemId));
+            judgeManager.judgeCopy(Long.parseLong(problemId));
             message = new Message(ApiMessageCode.SUCCESS_STATUS, "");
-        } catch (ProblemNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             e.printStackTrace();
             message = new Message(ApiMessageCode.JUDGE_COPY_ERROR, "");
         }
