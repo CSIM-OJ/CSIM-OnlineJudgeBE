@@ -1,6 +1,7 @@
 package csim.scu.onlinejudge.dao.domain.assistant;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import csim.scu.onlinejudge.dao.domain.base.AbstractUser;
 import csim.scu.onlinejudge.dao.domain.course.Course;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,14 +14,8 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class Assistant {
+public class Assistant extends AbstractUser {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long assistantId;
-    private String account;
-    private String password;
-    private String name;
     @ManyToMany
     @JoinTable(name = "assistant_course", joinColumns = @JoinColumn(name = "assistant_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id"))
@@ -28,9 +23,7 @@ public class Assistant {
     private List<Course> courses;
 
     public Assistant(String account, String password, String name, List<Course> courses) {
-        this.account = account;
-        this.password = password;
-        this.name = name;
+        super(account, password, name);
         this.courses = courses;
     }
 

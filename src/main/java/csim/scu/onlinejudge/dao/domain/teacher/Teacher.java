@@ -1,5 +1,6 @@
 package csim.scu.onlinejudge.dao.domain.teacher;
 
+import csim.scu.onlinejudge.dao.domain.base.AbstractUser;
 import csim.scu.onlinejudge.dao.domain.course.Course;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,21 +13,13 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Teacher {
+public class Teacher extends AbstractUser {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long teacherId;
-    private String account;
-    private String password;
-    private String name;
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Course> courses;
 
     public Teacher(String account, String password, String name, List<Course> courses) {
-        this.account = account;
-        this.password = password;
-        this.name = name;
+        super(account, password, name);
         this.courses = courses;
     }
 
