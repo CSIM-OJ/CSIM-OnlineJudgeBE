@@ -1,5 +1,6 @@
 package csim.scu.onlinejudge.dao.domain.feedback;
 
+import csim.scu.onlinejudge.dao.domain.base.BaseEntity;
 import csim.scu.onlinejudge.dao.domain.course.Course;
 import csim.scu.onlinejudge.dao.domain.student.Student;
 import lombok.Getter;
@@ -13,11 +14,8 @@ import java.util.Date;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Feedback {
+public class Feedback extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long feedbackId;
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, optional = false)
     @JoinColumn(name = "course_id")
     private Course course;

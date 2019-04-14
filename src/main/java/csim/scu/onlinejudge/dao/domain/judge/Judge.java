@@ -2,6 +2,7 @@ package csim.scu.onlinejudge.dao.domain.judge;
 
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
+import csim.scu.onlinejudge.dao.domain.base.BaseEntity;
 import csim.scu.onlinejudge.dao.domain.problem.Problem;
 import csim.scu.onlinejudge.dao.domain.student.Student;
 import lombok.Getter;
@@ -22,11 +23,8 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Judge {
+public class Judge extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long judgeId;
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, optional = false)
     @JoinColumn(name = "problem_id")
     private Problem problem;

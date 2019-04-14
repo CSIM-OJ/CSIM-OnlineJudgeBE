@@ -1,24 +1,30 @@
 package csim.scu.onlinejudge.dao.domain.problem;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.util.List;
 
-public interface ProblemInfo {
+@Getter
+@Setter
+@AllArgsConstructor
+public class ProblemInfo {
 
-    String getName();
-    String getType();
-    String getCategory();
-    String[] getTag();
-    double getRate();
-    String getDescription();
-    String getInputDesc();
-    String getOutputDesc();
-    List<TestCase> getTestCases();
-    Date getDeadline();
-    int getCorrectNum();
-    int getIncorrectNum();
-    double getCorrectRate();
-    String getBestStudentAccount();
+    private String name;
+    private String type;
+    private String category;
+    private String[] tag;
+    private double rate;
+    private String description;
+    private String inputDesc;
+    private String outputDesc;
+    private List<TestCase> testCases;
+    private Date deadline;
+    private int correctNum;
+    private int incorrectNum;
+    private double correctRate;
+    private String bestStudentAccount;
 }

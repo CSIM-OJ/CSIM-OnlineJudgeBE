@@ -2,6 +2,7 @@ package csim.scu.onlinejudge.dao.domain.team;
 
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
+import csim.scu.onlinejudge.dao.domain.base.BaseEntity;
 import csim.scu.onlinejudge.dao.domain.course.Course;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,11 +20,8 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Team {
+public class Team extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long teamId;
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, optional = false)
     @JoinColumn(name = "course_id")
     private Course course;

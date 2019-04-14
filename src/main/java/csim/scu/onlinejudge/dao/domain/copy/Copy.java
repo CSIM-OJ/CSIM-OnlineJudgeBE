@@ -1,5 +1,6 @@
 package csim.scu.onlinejudge.dao.domain.copy;
 
+import csim.scu.onlinejudge.dao.domain.base.BaseEntity;
 import csim.scu.onlinejudge.dao.domain.problem.Problem;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,11 +12,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Copy {
+public class Copy extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long copyId;
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, optional = false)
     @JoinColumn(name = "problem_id")
     private Problem problem;

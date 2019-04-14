@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Setter
 public class CourseInfo {
 
-    private Long courseId;
-    private String courseName;
+    private Long id;
+    private String name;
     private String semester;
 }
