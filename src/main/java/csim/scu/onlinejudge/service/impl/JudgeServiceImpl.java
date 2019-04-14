@@ -1,19 +1,20 @@
 package csim.scu.onlinejudge.service.impl;
 
-import csim.scu.onlinejudge.common.exception.JudgeNotFoundException;
+import csim.scu.onlinejudge.common.exception.EntityNotFoundException;
 import csim.scu.onlinejudge.dao.domain.judge.Judge;
 import csim.scu.onlinejudge.dao.domain.problem.Problem;
 import csim.scu.onlinejudge.dao.domain.student.Student;
 import csim.scu.onlinejudge.dao.repository.JudgeRepository;
+import csim.scu.onlinejudge.dao.repository.base.BaseRepository;
 import csim.scu.onlinejudge.service.JudgeService;
+import csim.scu.onlinejudge.service.base.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-public class JudgeServiceImpl implements JudgeService {
+public class JudgeServiceImpl extends BaseServiceImpl<Judge, Long> implements JudgeService {
 
     private JudgeRepository judgeRepository;
 
@@ -23,18 +24,18 @@ public class JudgeServiceImpl implements JudgeService {
     }
 
     @Override
+    public BaseRepository<Judge, Long> getBaseRepository() {
+        return judgeRepository;
+    }
+
+    @Override
     public int countByProblemAndStudent(Problem problem, Student student) {
         return judgeRepository.countByProblemAndStudent(problem, student);
     }
 
     @Override
-    public Judge findByProblemAndStudent(Problem problem, Student student) throws JudgeNotFoundException {
-        return judgeRepository.findByProblemAndStudent(problem, student).orElseThrow(JudgeNotFoundException::new);
-    }
-
-    @Override
-    public Judge save(Judge judge) {
-        return judgeRepository.save(judge);
+    public Judge findByProblemAndStudent(Problem problem, Student student) throws EntityNotFoundException {
+        return judgeRepository.findByProblemAndStudent(problem, student).orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
@@ -47,7 +48,6 @@ public class JudgeServiceImpl implements JudgeService {
         return judgeRepository.findByProblem(problem);
     }
 
-    @Transactional
     @Override
     public int updateRateByProblemAndStudent(double rate, Problem problem, Student student) {
         return judgeRepository.updateRateByProblemAndStudent(rate, problem, student);

@@ -1,16 +1,16 @@
 package csim.scu.onlinejudge.service.impl;
 
-import csim.scu.onlinejudge.common.exception.AssistantNotFoundException;
+import csim.scu.onlinejudge.common.exception.EntityNotFoundException;
 import csim.scu.onlinejudge.dao.domain.assistant.Assistant;
 import csim.scu.onlinejudge.dao.repository.AssistantRepository;
+import csim.scu.onlinejudge.dao.repository.base.BaseRepository;
 import csim.scu.onlinejudge.service.AssistantService;
+import csim.scu.onlinejudge.service.base.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import org.springframework.transaction.annotation.Transactional;
-
 @Service
-public class AssistantServiceImpl implements AssistantService {
+public class AssistantServiceImpl extends BaseServiceImpl<Assistant, Long> implements AssistantService {
 
     private AssistantRepository assistantRepository;
 
@@ -20,19 +20,18 @@ public class AssistantServiceImpl implements AssistantService {
     }
 
     @Override
+    public BaseRepository<Assistant, Long> getBaseRepository() {
+        return assistantRepository;
+    }
+
+    @Override
     public boolean existByAccount(String account) {
         return assistantRepository.existsByAccount(account);
     }
 
     @Override
-    public Assistant findByAccount(String account) throws AssistantNotFoundException {
-        return assistantRepository.findByAccount(account).orElseThrow(AssistantNotFoundException::new);
-    }
-
-    @Transactional
-    @Override
-    public Assistant save(Assistant assistant) {
-        return assistantRepository.save(assistant);
+    public Assistant findByAccount(String account) throws EntityNotFoundException {
+        return assistantRepository.findByAccount(account).orElseThrow(EntityNotFoundException::new);
     }
 
     @Override

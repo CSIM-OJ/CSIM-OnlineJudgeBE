@@ -1,18 +1,22 @@
 package csim.scu.onlinejudge.service;
 
-import csim.scu.onlinejudge.common.exception.StudentNotFoundException;
+import csim.scu.onlinejudge.common.exception.EntityNotFoundException;
 import csim.scu.onlinejudge.dao.domain.course.Course;
 import csim.scu.onlinejudge.dao.domain.student.Student;
+import csim.scu.onlinejudge.service.base.BaseService;
 
 import java.util.List;
 import java.util.Map;
 
-public interface StudentService {
+public interface StudentService extends BaseService<Student, Long> {
 
     boolean existByAccount(String account);
-    Student findByAccount(String account) throws StudentNotFoundException;
-    Student save(Student student);
+
+    Student findByAccount(String account) throws EntityNotFoundException;
+
     int updatePasswordByAccount(String account, String oriPassword, String newPassword);
-    List<Course> findCoursesByAccount(String account) throws StudentNotFoundException;
-    List<Map<String, String>> getCourseIdAndCourseName(String account) throws StudentNotFoundException;
+
+    List<Course> findCoursesByAccount(String account) throws EntityNotFoundException;
+
+    List<Map<String, String>> getCourseIdAndCourseName(String account) throws EntityNotFoundException;
 }

@@ -1,12 +1,14 @@
 package csim.scu.onlinejudge.service.impl;
 
-import csim.scu.onlinejudge.common.exception.ProblemNotFoundException;
+import csim.scu.onlinejudge.common.exception.EntityNotFoundException;
 import csim.scu.onlinejudge.dao.domain.course.Course;
 import csim.scu.onlinejudge.dao.domain.problem.Problem;
 import csim.scu.onlinejudge.dao.domain.problem.ProblemInfo;
 import csim.scu.onlinejudge.dao.domain.problem.TestCase;
 import csim.scu.onlinejudge.dao.repository.ProblemRepository;
+import csim.scu.onlinejudge.dao.repository.base.BaseRepository;
 import csim.scu.onlinejudge.service.ProblemService;
+import csim.scu.onlinejudge.service.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProblemServiceImpl implements ProblemService {
+public class ProblemServiceImpl extends BaseServiceImpl<Problem, Long> implements ProblemService {
 
     private ProblemRepository problemRepository;
 
@@ -23,15 +25,9 @@ public class ProblemServiceImpl implements ProblemService {
         this.problemRepository = problemRepository;
     }
 
-    @Transactional
     @Override
-    public Problem save(Problem problem) {
-        return problemRepository.save(problem);
-    }
-
-    @Override
-    public Problem findById(Long id) throws ProblemNotFoundException {
-        return problemRepository.findById(id).orElseThrow(ProblemNotFoundException::new);
+    public BaseRepository<Problem, Long> getBaseRepository() {
+        return problemRepository;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -40,7 +36,7 @@ public class ProblemServiceImpl implements ProblemService {
                           String category, String[] tag,
                           String description, String inputDesc,
                           String outputDesc, List<TestCase> testCases,
-                          Date deadline) throws ProblemNotFoundException {
+                          Date deadline) throws EntityNotFoundException {
         Problem problem = findById(problemId);
         problem.setName(name);
         problem.setType(type);
@@ -54,21 +50,22 @@ public class ProblemServiceImpl implements ProblemService {
         problemRepository.save(problem);
     }
 
-    @Transactional
-    @Override
-    public void deleteById(Long id) {
-        problemRepository.deleteById(id);
-    }
-
     @Override
     public List<Problem> findByCourse(Course course) {
         return problemRepository.findByCourse(course);
     }
 
     @Override
-    public ProblemInfo getInfo(Long problemId) throws ProblemNotFoundException {
-        Optional<ProblemInfo> instance = problemRepository.findByProblemId(problemId);
-        ProblemInfo problemInfo = instance.orElseThrow(ProblemNotFoundException::new);
+    public ProblemInfo getInfo(Long problemId) throws EntityNotFoundException {
+        Optional<Problem> instance = problemRepository.findById(problemId);
+        Problem problem = instance.orElseThrow(EntityNotFoundException::new);
+        ProblemInfo problemInfo = new ProblemInfo(problem.getName(),
+                problem.getType(), problem.getCategory(), problem.getTag(),
+                problem.getRate(), problem.getDescription(),
+                problem.getInputDesc(), problem.getOutputDesc(),
+                problem.getTestCases(), problem.getDeadline(),
+                problem.getCorrectNum(), problem.getIncorrectNum(),
+                problem.getCorrectRate(), problem.getBestStudentAccount());
         return problemInfo;
     }
 
