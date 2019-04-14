@@ -3,6 +3,7 @@ package csim.scu.onlinejudge.dao.repository;
 import csim.scu.onlinejudge.dao.domain.judge.Judge;
 import csim.scu.onlinejudge.dao.domain.problem.Problem;
 import csim.scu.onlinejudge.dao.domain.student.Student;
+import csim.scu.onlinejudge.dao.repository.base.BaseRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface JudgeRepository extends JpaRepository<Judge, Long> {
+public interface JudgeRepository extends BaseRepository<Judge, Long> {
 
     int countByProblemAndStudent(Problem problem, Student student);
 

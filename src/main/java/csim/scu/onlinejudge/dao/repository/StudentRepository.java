@@ -2,6 +2,7 @@ package csim.scu.onlinejudge.dao.repository;
 
 import csim.scu.onlinejudge.dao.domain.course.Course;
 import csim.scu.onlinejudge.dao.domain.student.Student;
+import csim.scu.onlinejudge.dao.repository.base.BaseRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -12,11 +13,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface StudentRepository extends JpaRepository<Student, Long> {
+public interface StudentRepository extends BaseRepository<Student, Long> {
 
     boolean existsByAccount(String account);
+
     Optional<Student> findByAccount(String account);
+
     Optional<Student> findByName(String name);
+
     @Modifying(clearAutomatically = true)
     @Query("update Student set password=:newPassword where account=:account AND password=:oriPassword")
     int updatePasswordByAccountAndPassword(@Param("account")String account,
