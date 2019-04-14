@@ -1,4 +1,4 @@
-package csim.scu.onlinejudge.dao.domain;
+package csim.scu.onlinejudge.dao.domain.base;
 
 import lombok.Getter;
 import lombok.Setter;
