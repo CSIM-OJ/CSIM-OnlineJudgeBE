@@ -10,43 +10,6 @@ public class BaseApi {
     private final String LOGGED_IN = "logged_in";
     private final String USER_TYPE = "user_type";
 
-    protected AdminService adminService;
-    protected AssistantService assistantService;
-    protected CommonService commonService;
-    protected CopyService copyService;
-    protected CourseService courseService;
-    protected FeedbackService feedbackService;
-    protected JudgeService judgeService;
-    protected ProblemService problemService;
-    protected StudentService studentService;
-    protected TeacherService teacherService;
-    protected TeamService teamService;
-
-    @Autowired
-    private void setAllService(AdminService adminService,
-                          AssistantService assistantService,
-                          CommonService commonService,
-                          CopyService copyService,
-                          CourseService courseService,
-                          FeedbackService feedbackService,
-                          JudgeService judgeService,
-                          ProblemService problemService,
-                          StudentService studentService,
-                          TeacherService teacherService,
-                          TeamService teamService) {
-        this.adminService = adminService;
-        this.assistantService = assistantService;
-        this.commonService = commonService;
-        this.copyService = copyService;
-        this.courseService = courseService;
-        this.feedbackService = feedbackService;
-        this.judgeService = judgeService;
-        this.problemService = problemService;
-        this.studentService = studentService;
-        this.teacherService = teacherService;
-        this.teamService = teamService;
-    }
-
     protected void setUserAccount(String account, HttpSession session) {
         session.setAttribute(LOGGED_IN, account);
     }
