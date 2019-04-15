@@ -9,6 +9,7 @@ import csim.scu.onlinejudge.dao.domain.problem.Problem;
 import csim.scu.onlinejudge.dao.domain.problem.ProblemInfo;
 import csim.scu.onlinejudge.dao.domain.problem.TestCase;
 import csim.scu.onlinejudge.manager.CourseManager;
+import csim.scu.onlinejudge.manager.JudgeManager;
 import csim.scu.onlinejudge.manager.ProblemManager;
 import csim.scu.onlinejudge.service.ProblemService;
 import io.swagger.annotations.Api;
@@ -31,14 +32,17 @@ public class ProblemApi extends BaseApi {
     private ProblemManager problemManager;
     private ProblemService problemService;
     private CourseManager courseManager;
+    private JudgeManager judgeManager;
 
     @Autowired
     public ProblemApi(ProblemManager problemManager,
                       ProblemService problemService,
-                      CourseManager courseManager) {
+                      CourseManager courseManager,
+                      JudgeManager judgeManager) {
         this.problemManager = problemManager;
         this.problemService = problemService;
         this.courseManager = courseManager;
+        this.judgeManager = judgeManager;
     }
 
     @ApiOperation(value = "取得題目資訊",
@@ -61,10 +65,9 @@ public class ProblemApi extends BaseApi {
     @GetMapping(value = "/getProblems")
     private Message getProblems(String courseId) {
         Message message;
-
         try {
-            List<Problem> problems = courseManager.findByCourseId(Long.parseLong(courseId));
-            message = new Message(ApiMessageCode.SUCCESS_STATUS, problems);
+            List<Map<String, Object>> result = judgeManager.getProblems(Long.parseLong(courseId));
+            message = new Message(ApiMessageCode.SUCCESS_STATUS, result);
         } catch (EntityNotFoundException e) {
             e.printStackTrace();
             message = new Message(ApiMessageCode.GET_PROBLEMS_INFO_ERROR, "");
