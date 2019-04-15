@@ -279,19 +279,4 @@ public class CourseManagerImpl implements CourseManager {
         }
         return results;
     }
-
-    @Override
-    public List<Map<String, Object>> getStudentHistoryScoreInfo(Long courseId, String account) throws EntityNotFoundException {
-        return null;
-    }
-
-    @Override
-    public List<CorrectRank> getCorrectRank(Long courseId) throws EntityNotFoundException {
-        return null;
-    }
-
-    @Override
-    public List<BestCodeRank> getBestCodeRank(Long courseId) throws EntityNotFoundException {
-        return null;
-    }
 }

@@ -46,10 +46,4 @@ public interface CourseManager {
     List<Map<String, String>> getStudentCoursesInfo(String account) throws EntityNotFoundException;
 
     List<Map<String, String>> getCoursesInfo();
-
-    List<Map<String, Object>> getStudentHistoryScoreInfo(Long courseId, String account) throws EntityNotFoundException;
-
-    List<CorrectRank> getCorrectRank(Long courseId) throws EntityNotFoundException;
-
-    List<BestCodeRank> getBestCodeRank(Long courseId) throws EntityNotFoundException;
 }
