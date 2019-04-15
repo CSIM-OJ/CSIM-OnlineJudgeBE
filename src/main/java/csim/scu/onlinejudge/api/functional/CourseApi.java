@@ -37,6 +37,7 @@ public class CourseApi extends BaseApi {
         return message;
     }
 
+    // todo
     @ApiOperation(value = "取得課程裡的學生所有資訊",
             notes = "取得courseId，來獲得課程裡的學生所有資訊")
     @GetMapping(value = "/getStudentInfo")
