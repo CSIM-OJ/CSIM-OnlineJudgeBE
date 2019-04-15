@@ -25,4 +25,6 @@ public interface JudgeManager {
     List<CorrectRank> getCorrectRank(Long courseId) throws EntityNotFoundException;
 
     List<BestCodeRank> getBestCodeRank(Long courseId) throws EntityNotFoundException;
+
+    List<Map<String, Object>> getProblems(Long courseId) throws EntityNotFoundException;
 }

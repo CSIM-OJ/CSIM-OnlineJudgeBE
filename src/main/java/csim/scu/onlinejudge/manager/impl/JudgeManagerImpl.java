@@ -18,6 +18,7 @@ import csim.scu.onlinejudge.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.rmi.transport.ObjectTable;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -247,29 +248,43 @@ public class JudgeManagerImpl implements JudgeManager {
         Course course = courseService.findById(courseId);
         List<Problem> problems = problemService.findByCourse(course);
         Student student = studentService.findByAccount(account);
+        List<Map<String, Object>> result = new ArrayList<>();
         for (Problem problem : problems) {
-            Map<String, Object> map = new HashMap<>();
+            Map<String, Object> problemResult = new HashMap<>();
             boolean isJudge = judgeService.existByProblemAndStudent(problem, student);
             if (isJudge) {
                 Judge judge = judgeService.findByProblemAndStudent(problem, student);
                 String problemId = String.valueOf(problem.getId());
                 String problemName = problem.getName();
                 String type = problem.getType();
-                List<HistoryCode> historyCodes = judge.getHistoryCodes();
-                int lastIndex = historyCodes.size() - 1;
-                String code = historyCodes.get(lastIndex).getCode();
-                String score = String.valueOf(historyCodes.get(lastIndex).getScore());
-                String handDate = historyCodes.get(lastIndex).getHandDate();
-                String runTime = String.valueOf(historyCodes.get(lastIndex).getRunTime());
+                List<HistoryCode> historyCode = judge.getHistoryCodes();
                 String rate = String.valueOf(judge.getRate());
                 String correctRate = String.valueOf(problem.getCorrectRate());
                 boolean isBestCode = false;
                 if (problem.getBestStudentAccount().equals(account)) {
                     isBestCode = true;
                 }
+                problemResult.put("problemId", problemId);
+                problemResult.put("problemName", problemName);
+                problemResult.put("type", type);
+                problemResult.put("historyCode", historyCode);
+                problemResult.put("rate", rate);
+                problemResult.put("correctRate", correctRate);
+                problemResult.put("isBestCode", isBestCode);
+
+                List<Copy> copies = copyService.findByStudentTwoAccount(account);
+                List<Map<String, String>> copyResultList = new ArrayList<>();
+                for (Copy copy : copies) {
+                    Map<String, String> copyResult = new HashMap<>();
+                    copyResult.put("account", copy.getStudentOneAccount());
+                    copyResult.put("similarity", String.valueOf(copy.getSimilarity()));
+                    copyResultList.add(copyResult);
+                }
+                problemResult.put("copys", copyResultList);
+                result.add(problemResult);
             }
         }
-        return null;
+        return result;
     }
 
     // 利用課程id，取得所有judge，並排序出學生正確解題的順序
@@ -362,6 +377,66 @@ public class JudgeManagerImpl implements JudgeManager {
         return sorted;
     }
 
+    // 利用課程Id，取得課程下的所有題目相關資訊
+    @Override
+    public List<Map<String, Object>> getProblems(Long courseId) throws EntityNotFoundException {
+        Course course = courseService.findById(courseId);
+        List<Problem> problems = course.getProblems();
+        List<Student> students = course.getStudents();
+
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (Problem problem : problems) {
+            Map<String, Object> problemResult = new HashMap<>();
+            String problemId = String.valueOf(problem.getId());
+            String name = problem.getName();
+            String type = problem.getType();
+            String category = problem.getCategory();
+            String[] tag = problem.getTag();
+            String status = decideDeadlineStatus(problem.getDeadline());
+            int doneStudentNum = judgeService.countByProblem(problem);
+            int undoStudentNum = students.size() - doneStudentNum;
+            String rate = String.valueOf(problem.getRate());
+            String correctRate = String.valueOf(problem.getCorrectRate());
+            String bestStudentId = problem.getBestStudentAccount();
+            Student student = studentService.findByAccount(bestStudentId);
+            String bestStudentName = student.getName();
+            Judge judge = judgeService.findByProblemAndStudent(problem, student);
+            String bestRunTime = String.valueOf(judge.getHistoryCodes().get(judge.getHistoryCodes().size() - 1).getRunTime());
+            problemResult.put("problemId", problemId);
+            problemResult.put("name", name);
+            problemResult.put("type", type);
+            problemResult.put("category", category);
+            problemResult.put("tag", tag);
+            problemResult.put("status", status);
+            problemResult.put("undoStudentNum", undoStudentNum);
+            problemResult.put("doneStudentNum", doneStudentNum);
+            problemResult.put("rate", rate);
+            problemResult.put("correctRate", correctRate);
+            problemResult.put("bestStudentName", bestStudentName);
+            problemResult.put("bestRunTime", bestRunTime);
+
+            List<Copy> copies = copyService.findByProblem(problem);
+            List<Map<String, String>> copyResultList = new ArrayList<>();
+            for (Copy copy : copies) {
+                Map<String, String> copyResult = new HashMap<>();
+                String studentOneId = copy.getStudentOneAccount();
+                String studentOneName = studentService.findByAccount(studentOneId).getName();
+                String studentTwoId = copy.getStudentTwoAccount();
+                String studentTwoName = studentService.findByAccount(studentTwoId).getName();
+                String similarity = String.valueOf(copy.getSimilarity());
+                copyResult.put("studentOneId", studentOneId);
+                copyResult.put("studentOneName", studentOneName);
+                copyResult.put("studentTwoId", studentTwoId);
+                copyResult.put("studentTwoName", studentTwoName);
+                copyResult.put("similarity", similarity);
+                copyResultList.add(copyResult);
+            }
+            problemResult.put("detectCopyResult", copyResultList);
+            result.add(problemResult);
+        }
+        return result;
+    }
+
     private Language chooseLanguage(String language) {
         switch (language) {
             case "Java":
@@ -385,6 +460,19 @@ public class JudgeManagerImpl implements JudgeManager {
                 return JudgeBehavior.ReadFileAndWriteFile;
             default:
                 return null;
+        }
+    }
+
+    private String decideDeadlineStatus(Date date) {
+        Calendar now = Calendar.getInstance();
+        Calendar deadline = now.getInstance();
+        deadline.setTime(date);
+
+        if (now.before(deadline)) {
+            return "可作答";
+        }
+        else {
+            return "已過期";
         }
     }
 }
