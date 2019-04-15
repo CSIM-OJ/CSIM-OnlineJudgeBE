@@ -34,4 +34,6 @@ public interface JudgeRepository extends BaseRepository<Judge, Long> {
     double getAvgRateByProblem(@Param("problem") Problem problem);
 
     List<Judge> findByStudent(Student student);
+
+    int countByProblem(Problem problem);
 }
