@@ -62,4 +62,9 @@ public class JudgeServiceImpl extends BaseServiceImpl<Judge, Long> implements Ju
     public List<Judge> findByStudent(Student student) {
         return judgeRepository.findByStudent(student);
     }
+
+    @Override
+    public int countByProblem(Problem problem) {
+        return judgeRepository.countByProblem(problem);
+    }
 }

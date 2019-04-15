@@ -23,4 +23,6 @@ public interface JudgeService extends BaseService<Judge, Long> {
     double getAvgRateByProblem(Problem problem);
 
     List<Judge> findByStudent(Student student);
+
+    int countByProblem(Problem problem);
 }
