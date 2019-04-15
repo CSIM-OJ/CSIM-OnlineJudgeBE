@@ -94,8 +94,15 @@ public class StudentApi extends BaseApi {
             notes = "取得courseId，來獲得課程下的學生歷史成績及題目資訊")
     @GetMapping(value = "/historyScore")
     private Message getHistoryScore(String courseId, HttpSession session) {
+        String account = getUserAccount(session);
         Message message;
-        return null;
+        try {
+            message = new Message(ApiMessageCode.SUCCESS_STATUS, judgeManager.getStudentHistoryScoreInfo(Long.parseLong(courseId), account));
+        } catch (EntityNotFoundException e) {
+            e.printStackTrace();
+            message = new Message(ApiMessageCode.GET_HISTORY_SCORE_ERROR, "");
+        }
+        return message;
     }
 
     @ApiOperation(value = "課程下的學生所有題目資料",
