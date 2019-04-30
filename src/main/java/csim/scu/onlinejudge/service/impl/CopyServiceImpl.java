@@ -27,8 +27,8 @@ public class CopyServiceImpl extends BaseServiceImpl<Copy, Long> implements Copy
     }
 
     @Override
-    public List<Copy> findByStudentTwoAccount(String account) {
-        return copyRepository.findByStudentTwoAccount(account);
+    public List<Copy> findByProblemAndStudentTwoAccount(Problem problem, String account) {
+        return copyRepository.findByProblemAndStudentTwoAccount(problem, account);
     }
 
     @Override
