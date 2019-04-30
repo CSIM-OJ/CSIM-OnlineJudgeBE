@@ -53,8 +53,8 @@ public class FeedbackApi extends BaseApi {
     private Message getCourseFeedbacks(String courseId) {
         Message message;
         try {
-            List<Feedback> feedbacks = courseManager.findFeedbacksByCourseId(Long.parseLong(courseId));
-            message = new Message(ApiMessageCode.SUCCESS_STATUS, feedbacks);
+            List<Map<String, String>> result = courseManager.findFeedbacksByCourseId(Long.parseLong(courseId));
+            message = new Message(ApiMessageCode.SUCCESS_STATUS, result);
         } catch (EntityNotFoundException e) {
             e.printStackTrace();
             message = new Message(ApiMessageCode.GET_COURSE_FEEDBACK_ERROR, "");
