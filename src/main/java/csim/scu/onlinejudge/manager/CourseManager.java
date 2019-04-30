@@ -16,7 +16,7 @@ import java.util.Map;
 
 public interface CourseManager {
 
-    Course createCourse(String account, String courseName, String semester) throws EntityNotFoundException;
+    Course createCourse(String account, String courseName, String semester, String studentClass, List<String> taList) throws EntityNotFoundException;
 
     void deleteCourseById(Long id) throws EntityNotFoundException;
 
@@ -41,7 +41,7 @@ public interface CourseManager {
 
     Feedback addFeedback(Long courseId, String account, String content) throws ParseException, EntityNotFoundException;
 
-    List<Feedback> findFeedbacksByCourseId(Long courseId) throws EntityNotFoundException;
+    List<Map<String, String>> findFeedbacksByCourseId(Long courseId) throws EntityNotFoundException;
 
     List<Map<String, String>> getStudentCoursesInfo(String account) throws EntityNotFoundException;
 
