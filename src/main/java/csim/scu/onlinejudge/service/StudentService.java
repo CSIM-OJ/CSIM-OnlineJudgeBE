@@ -19,4 +19,8 @@ public interface StudentService extends BaseService<Student, Long> {
     List<Course> findCoursesByAccount(String account) throws EntityNotFoundException;
 
     List<Map<String, String>> getCourseIdAndCourseName(String account) throws EntityNotFoundException;
+
+    List<Student> findByStudentClass(String studentClass);
+
+    List<String> findDistinctStudentClass();
 }
