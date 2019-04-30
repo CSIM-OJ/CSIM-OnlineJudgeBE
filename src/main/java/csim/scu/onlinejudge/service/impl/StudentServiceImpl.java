@@ -65,4 +65,14 @@ public class StudentServiceImpl extends BaseServiceImpl<Student, Long> implement
         }
         return list;
     }
+
+    @Override
+    public List<Student> findByStudentClass(String studentClass) {
+        return studentRepository.findByStudentClass(studentClass);
+    }
+
+    @Override
+    public List<String> findDistinctStudentClass() {
+        return studentRepository.findDistinctStudentClass();
+    }
 }
