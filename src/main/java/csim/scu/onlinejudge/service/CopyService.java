@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CopyService extends BaseService<Copy, Long> {
 
-    List<Copy> findByStudentTwoAccount(String account);
+    List<Copy> findByProblemAndStudentTwoAccount(Problem problem, String account);
 
     List<Copy> findByProblem(Problem problem);
 }
