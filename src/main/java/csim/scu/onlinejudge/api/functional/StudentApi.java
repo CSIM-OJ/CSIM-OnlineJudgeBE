@@ -144,6 +144,4 @@ public class StudentApi extends BaseApi {
         }
         return message;
     }
-
-
 }
