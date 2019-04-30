@@ -2,7 +2,6 @@ package csim.scu.onlinejudge.dao.repository;
 
 import csim.scu.onlinejudge.dao.domain.assistant.Assistant;
 import csim.scu.onlinejudge.dao.repository.base.BaseRepository;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,4 +23,5 @@ public interface AssistantRepository extends BaseRepository<Assistant, Long> {
     int updatePasswordByAccountAndPassword(@Param("account")String account,
                                            @Param("oriPassword")String oriPassword,
                                            @Param("newPassword")String newPassword);
+
 }
