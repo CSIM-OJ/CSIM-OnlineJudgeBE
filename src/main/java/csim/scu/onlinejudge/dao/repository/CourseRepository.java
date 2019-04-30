@@ -16,6 +16,5 @@ public interface CourseRepository extends BaseRepository<Course, Long> {
     Optional<Course> findByName(String name);
 
     @Query(value = "select new csim.scu.onlinejudge.dao.domain.course.CourseInfo(c.id, c.name, c.semester) from Course c")
-
     List<CourseInfo> getAllCourseInfo();
 }
