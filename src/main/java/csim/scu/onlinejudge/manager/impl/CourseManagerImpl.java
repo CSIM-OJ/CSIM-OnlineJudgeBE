@@ -3,6 +3,7 @@ package csim.scu.onlinejudge.manager.impl;
 import csim.scu.onlinejudge.common.exception.EntityNotFoundException;
 import csim.scu.onlinejudge.dao.domain.assistant.Assistant;
 import csim.scu.onlinejudge.dao.domain.course.Course;
+import csim.scu.onlinejudge.dao.domain.course.CourseInfo;
 import csim.scu.onlinejudge.dao.domain.feedback.Feedback;
 import csim.scu.onlinejudge.dao.domain.judge.HistoryCode;
 import csim.scu.onlinejudge.dao.domain.judge.Judge;
@@ -51,13 +52,28 @@ public class CourseManagerImpl implements CourseManager {
         this.feedbackService = feedbackService;
     }
 
-    // 教授建立課程
+    // 教授建立課程，一併加入學生跟助教
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Course createCourse(String account, String courseName, String semester) throws EntityNotFoundException {
+    public Course createCourse(String account, String courseName, String semester, String studentClass, List<String> taList) throws EntityNotFoundException {
         Teacher teacher = teacherService.findByAccount(account);
         Course course = new Course(teacher, courseName, semester, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-        return courseService.save(course);
+        course = courseService.save(course);
+
+        for (String taAccount : taList) {
+            Assistant assistant = assistantService.findByAccount(taAccount);
+            List<Course> courses = assistant.getCourses();
+            courses.add(course);
+            assistantService.save(assistant);
+        }
+        List<Student> students = studentService.findByStudentClass(studentClass);
+        for (Student student : students) {
+            List<Course> courses = student.getCourses();
+            courses.add(course);
+            student.setCourses(courses);
+        }
+        studentService.saveAll(students);
+        return course;
     }
 
     // 教授刪除課程
@@ -151,7 +167,22 @@ public class CourseManagerImpl implements CourseManager {
     // 教授取得自身創建的所有課程資訊
     @Override
     public List<Map<String, String>> getCoursesInfo(String account) throws EntityNotFoundException {
-        return teacherService.getCoursesInfo(account);
+        Teacher teacher = teacherService.findByAccount(account);
+        List<Course> courses = teacher.getCourses();
+        List<Map<String, String>> result = new ArrayList<>();
+        for (Course course : courses) {
+            Map<String, String> courseInfoResult = new HashMap<>();
+            String courseId = String.valueOf(course.getId());
+            String courseName = course.getName();
+            String teacherName = teacher.getName();
+            String semester = course.getSemester();
+            courseInfoResult.put("courseId", courseId);
+            courseInfoResult.put("courseName", courseName);
+            courseInfoResult.put("teacherName", teacherName);
+            courseInfoResult.put("semester", semester);
+            result.add(courseInfoResult);
+        }
+        return result;
     }
 
     // 在課程中建立題目
@@ -240,9 +271,24 @@ public class CourseManagerImpl implements CourseManager {
 
     // 利用課程Id取得所有該課程下的所有回饋資訊
     @Override
-    public List<Feedback> findFeedbacksByCourseId(Long courseId) throws EntityNotFoundException {
+    public List<Map<String, String>> findFeedbacksByCourseId(Long courseId) throws EntityNotFoundException {
         Course course = courseService.findById(courseId);
-        return feedbackService.findByCourse(course);
+        List<Feedback> feedbacks = feedbackService.findByCourse(course);
+        List<Map<String, String>> result = new ArrayList<>();
+        for (Feedback feedback : feedbacks) {
+            Map<String, String> feedbackResult = new HashMap<>();
+            String account = feedback.getStudent().getAccount();
+            String name = feedback.getStudent().getName();
+            String content = feedback.getContent();
+            String date = new SimpleDateFormat("yyyy-MM-dd").format(feedback.getDate());
+
+            feedbackResult.put("account", account);
+            feedbackResult.put("name", name);
+            feedbackResult.put("content", content);
+            feedbackResult.put("date", date);
+            result.add(feedbackResult);
+        }
+        return result;
     }
 
     // 利用學生學號account，取得該學生擁有的課程列表資訊
