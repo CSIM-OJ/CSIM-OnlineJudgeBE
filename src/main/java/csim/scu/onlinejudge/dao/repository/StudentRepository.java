@@ -26,4 +26,10 @@ public interface StudentRepository extends BaseRepository<Student, Long> {
     int updatePasswordByAccountAndPassword(@Param("account")String account,
                                  @Param("oriPassword")String oriPassword,
                                  @Param("newPassword")String newPassword);
+
+
+    List<Student> findByStudentClass(String studentClass);
+
+    @Query("select distinct s.studentClass from Student s")
+    List<String> findDistinctStudentClass();
 }
