@@ -6,7 +6,10 @@ import csim.scu.onlinejudge.api.base.BaseApi;
 import csim.scu.onlinejudge.common.exception.*;
 import csim.scu.onlinejudge.common.message.ApiMessageCode;
 import csim.scu.onlinejudge.common.message.Message;
+import csim.scu.onlinejudge.dao.domain.student.Student;
 import csim.scu.onlinejudge.manager.CourseManager;
+import csim.scu.onlinejudge.service.AssistantService;
+import csim.scu.onlinejudge.service.StudentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,28 +25,35 @@ import java.util.Map;
 public class TeacherApi extends BaseApi {
 
     private CourseManager courseManager;
+    private StudentService studentService;
+    private AssistantService assistantService;
 
     @Autowired
-    public TeacherApi(CourseManager courseManager) {
+    public TeacherApi(CourseManager courseManager,
+                      StudentService studentService,
+                      AssistantService assistantService) {
         this.courseManager = courseManager;
+        this.studentService = studentService;
+        this.assistantService = assistantService;
     }
 
     @ApiOperation(value = "建立課程",
                   notes = "取得courseName、semester並建立課程")
     @PostMapping(value = "/createCourse")
-    private Message createCourse(@RequestBody Map<String, String> map,
+    private Message createCourse(@RequestBody Map<String, Object> map,
                                  HttpSession session) {
         Message message;
         String account = getUserAccount(session);
-        String courseName = map.get("courseName");
-        String semester = map.get("semester");
+        String courseName = map.get("courseName").toString();
+        String semester = map.get("semester").toString();
+        String studentClass = map.get("studentClass").toString();
+        List<String> taList = (List<String>) map.get("taList");
         try {
-            courseManager.createCourse(account, courseName, semester);
+            courseManager.createCourse(account, courseName, semester, studentClass, taList);
             message = new Message(ApiMessageCode.SUCCESS_STATUS, "");
         } catch (EntityNotFoundException e) {
             e.printStackTrace();
             message = new Message(ApiMessageCode.CREATE_COURSE_ERROR, "");
-
         }
         return message;
     }
@@ -124,6 +134,34 @@ public class TeacherApi extends BaseApi {
         } catch (EntityNotFoundException e) {
             e.printStackTrace();
             message = new Message(ApiMessageCode.GET_COURSE_INFO_ERROR, "");
+        }
+        return message;
+    }
+
+    @ApiOperation(value = "取得所有學生班級列表",
+            notes = "回傳所有學生班級列表")
+    @GetMapping(value = "/studentClassList")
+    private Message getStudentClassList() {
+        Message message;
+        try {
+            message = new Message(ApiMessageCode.SUCCESS_STATUS, studentService.findDistinctStudentClass());
+        } catch (Exception e) {
+            e.printStackTrace();
+            message = new Message(ApiMessageCode.GET_STUDENT_CLASS_LIST_ERROR, "");
+        }
+        return message;
+    }
+
+    @ApiOperation(value = "取得未被指派的助教名單",
+            notes = "回傳所有助教資訊")
+    @GetMapping(value = "/assistantList")
+    private Message getAssistantList() {
+        Message message;
+        try {
+            message = new Message(ApiMessageCode.SUCCESS_STATUS, assistantService.getAssistantListInfo());
+        } catch (Exception e) {
+            e.printStackTrace();
+            message = new Message(ApiMessageCode.GET_ASSISTANT_LIST_ERROR, "");
         }
         return message;
     }
