@@ -50,19 +50,4 @@ public class TeacherServiceImpl extends BaseServiceImpl<Teacher, Long> implement
         return findByAccount(account).getCourses();
     }
 
-    @Override
-    public List<Map<String, String>> getCoursesInfo(String account) throws EntityNotFoundException {
-        List<Map<String, String>> results = new ArrayList<>();
-        List<Course> courses = findCoursesByAccount(account);
-
-        for (Course course : courses) {
-            Map<String, String> map = new HashMap<>();
-            map.put("courseId", String.valueOf(course.getId()));
-            map.put("courseName", course.getName());
-            map.put("semester", course.getSemester());
-            results.add(map);
-        }
-        return results;
-    }
-
 }
