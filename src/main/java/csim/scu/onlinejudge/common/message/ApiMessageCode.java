@@ -22,6 +22,8 @@ public enum ApiMessageCode {
     MAP_ASSISTANTLIST_COURSE_ERROR("404", "助教列表配對課程失敗"),
     DELETE_ASSISTANTLIST_COURSE_ERROR("404", "助教列表退出課程失敗"),
     GET_COURSE_INFO_ERROR("404", "取得課程列表失敗"),
+    GET_STUDENT_CLASS_LIST_ERROR("404", "取得學生班級列表失敗"),
+    GET_ASSISTANT_LIST_ERROR("404", "取得助教名單失敗"),
     // ProblemApi
     GET_PROBLEM_INFO_ERROR("404", "取得題目資訊失敗"),
     GET_PROBLEMS_INFO_ERROR("404", "取得課程下的所有題目資訊失敗"),
@@ -35,6 +37,7 @@ public enum ApiMessageCode {
     JUDGE_COPY_ERROR("404", "批改抄襲失敗"),
     // CourseApi
     GET_COURSES_INFO_ERROR("404", "取得課程資訊失敗"),
+    GET_STUDENT_DATA_ERROR("404", "取得課程的所有學生成績失敗"),
     // FeedbackApi
     ADD_FEEDBACK_ERROR("404", "新增回饋失敗"),
     GET_COURSE_FEEDBACK_ERROR("404", "取得課程下的所有回饋失敗"),
