@@ -55,8 +55,8 @@ public class JudgeApi extends BaseApi {
 
         String account = getUserAccount(session);
         try {
-            Judge judge = judgeManager.findByProblemIdAndStudentAccount(Long.parseLong(problemId), account);
-            message = new Message(ApiMessageCode.SUCCESS_STATUS, judge);
+            Map<String, Object> result = judgeManager.getJudgeInfo(Long.parseLong(problemId), account);
+            message = new Message(ApiMessageCode.SUCCESS_STATUS, result);
         } catch (EntityNotFoundException e) {
             e.printStackTrace();
             message = new Message(ApiMessageCode.GET_JUDGED_INFO_ERROR, "");
