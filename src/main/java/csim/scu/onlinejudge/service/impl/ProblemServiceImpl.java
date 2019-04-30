@@ -59,11 +59,14 @@ public class ProblemServiceImpl extends BaseServiceImpl<Problem, Long> implement
     public ProblemInfo getInfo(Long problemId) throws EntityNotFoundException {
         Optional<Problem> instance = problemRepository.findById(problemId);
         Problem problem = instance.orElseThrow(EntityNotFoundException::new);
+        // 最後一個testcase為隱藏範本，故遮掉
+        List<TestCase> testCases = problem.getTestCases();
+        testCases.remove(testCases.size() - 1);
         ProblemInfo problemInfo = new ProblemInfo(problem.getName(),
                 problem.getType(), problem.getCategory(), problem.getTag(),
                 problem.getRate(), problem.getDescription(),
                 problem.getInputDesc(), problem.getOutputDesc(),
-                problem.getTestCases(), problem.getDeadline(),
+                testCases, problem.getDeadline(),
                 problem.getCorrectNum(), problem.getIncorrectNum(),
                 problem.getCorrectRate(), problem.getBestStudentAccount());
         return problemInfo;
