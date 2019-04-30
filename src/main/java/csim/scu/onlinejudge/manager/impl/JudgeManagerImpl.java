@@ -258,8 +258,8 @@ public class JudgeManagerImpl implements JudgeManager {
                 String problemName = problem.getName();
                 String type = problem.getType();
                 List<HistoryCode> historyCode = judge.getHistoryCodes();
-                String rate = String.valueOf(judge.getRate());
-                String correctRate = String.valueOf(problem.getCorrectRate());
+                String rate = String.valueOf(problem.getRate());
+                String correctRate = String.valueOf(problem.getCorrectRate() * 100);
                 boolean isBestCode = false;
                 if (problem.getBestStudentAccount().equals(account)) {
                     isBestCode = true;
@@ -272,7 +272,7 @@ public class JudgeManagerImpl implements JudgeManager {
                 problemResult.put("correctRate", correctRate);
                 problemResult.put("isBestCode", isBestCode);
 
-                List<Copy> copies = copyService.findByStudentTwoAccount(account);
+                List<Copy> copies = copyService.findByProblemAndStudentTwoAccount(problem, account);
                 List<Map<String, String>> copyResultList = new ArrayList<>();
                 for (Copy copy : copies) {
                     Map<String, String> copyResult = new HashMap<>();
@@ -390,6 +390,7 @@ public class JudgeManagerImpl implements JudgeManager {
             String problemId = String.valueOf(problem.getId());
             String name = problem.getName();
             String type = problem.getType();
+            String deadline = new SimpleDateFormat("yyyy-MM-dd").format(problem.getDeadline());
             String category = problem.getCategory();
             String[] tag = problem.getTag();
             String status = decideDeadlineStatus(problem.getDeadline());
@@ -398,10 +399,15 @@ public class JudgeManagerImpl implements JudgeManager {
             String rate = String.valueOf(problem.getRate());
             String correctRate = String.valueOf(problem.getCorrectRate());
             String bestStudentId = problem.getBestStudentAccount();
-            Student student = studentService.findByAccount(bestStudentId);
-            String bestStudentName = student.getName();
-            Judge judge = judgeService.findByProblemAndStudent(problem, student);
-            String bestRunTime = String.valueOf(judge.getHistoryCodes().get(judge.getHistoryCodes().size() - 1).getRunTime());
+            String bestStudentName = "";
+            String bestRunTime = "";
+            if (!bestStudentId.equals("")) {
+                Student student = studentService.findByAccount(bestStudentId);
+                Judge judge = judgeService.findByProblemAndStudent(problem, student);
+                bestStudentName = student.getName();
+                bestRunTime = String.valueOf(judge.getHistoryCodes().get(judge.getHistoryCodes().size() - 1).getRunTime());
+            }
+            problemResult.put("deadline", deadline);
             problemResult.put("problemId", problemId);
             problemResult.put("name", name);
             problemResult.put("type", type);
@@ -437,6 +443,51 @@ public class JudgeManagerImpl implements JudgeManager {
         return result;
     }
 
+    @Override
+    public Map<String, Object> getJudgeInfo(Long problemId, String account) throws EntityNotFoundException {
+        Problem problem = problemService.findById(problemId);
+        Student student = studentService.findByAccount(account);
+        Judge judge = judgeService.findByProblemAndStudent(problem, student);
+
+        List<HistoryCode> historyCodes = judge.getHistoryCodes();
+        int lastIndex = historyCodes.size() - 1;
+        HistoryCode lastHistoryCode = historyCodes.get(lastIndex);
+
+        Map<String, Object> result = new HashMap<>();
+
+        String headDate = lastHistoryCode.getHandDate();
+        String score = String.valueOf(lastHistoryCode.getScore());
+        String runTime = String.valueOf(lastHistoryCode.getRunTime());
+        String code = lastHistoryCode.getCode();
+        List<String> symbol = lastHistoryCode.getSymbol();
+        List<String> errorInfo = lastHistoryCode.getErrorMessage();
+
+        boolean isBest = false;
+        if (problem.getBestStudentAccount().equals(account)) {
+            isBest = true;
+        }
+        result.put("handDate", headDate);
+        result.put("score", score);
+        result.put("runTime", runTime);
+        result.put("code", code);
+        result.put("symbol", symbol);
+        result.put("errorInfo", errorInfo);
+
+        List<Copy> copies = copyService.findByProblemAndStudentTwoAccount(problem, account);
+        List<Map<String, String>> copyResultList = new ArrayList<>();
+        for (Copy copy : copies) {
+            Map<String, String> copyResult = new HashMap<>();
+            String anotherStudentId = copy.getStudentOneAccount();
+            String similarity = String.valueOf(copy.getSimilarity());
+            copyResult.put("anotherStudentId", anotherStudentId);
+            copyResult.put("similarity", similarity);
+            copyResultList.add(copyResult);
+        }
+        result.put("copyResult", copyResultList);
+
+        return result;
+    }
+
     private Language chooseLanguage(String language) {
         switch (language) {
             case "Java":
@@ -465,14 +516,16 @@ public class JudgeManagerImpl implements JudgeManager {
 
     private String decideDeadlineStatus(Date date) {
         Calendar now = Calendar.getInstance();
-        Calendar deadline = now.getInstance();
+        Calendar deadline = Calendar.getInstance();
         deadline.setTime(date);
+        // 避免今天日期跟截止日期同一天算作逾期的問題
+        deadline.add(Calendar.DATE, 1);
 
         if (now.before(deadline)) {
             return "可作答";
         }
         else {
-            return "已過期";
+            return "已關閉";
         }
     }
 }
