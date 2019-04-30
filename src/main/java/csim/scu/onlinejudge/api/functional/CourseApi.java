@@ -1,9 +1,11 @@
 package csim.scu.onlinejudge.api.functional;
 
 import csim.scu.onlinejudge.api.base.BaseApi;
+import csim.scu.onlinejudge.common.exception.EntityNotFoundException;
 import csim.scu.onlinejudge.common.message.ApiMessageCode;
 import csim.scu.onlinejudge.common.message.Message;
 import csim.scu.onlinejudge.manager.CourseManager;
+import csim.scu.onlinejudge.manager.ProblemManager;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class CourseApi extends BaseApi {
 
     private CourseManager courseManager;
+    private ProblemManager problemManager;
 
     @Autowired
-    public CourseApi(CourseManager courseManager) {
+    public CourseApi(CourseManager courseManager,
+                     ProblemManager problemManager) {
         this.courseManager = courseManager;
+        this.problemManager = problemManager;
     }
 
     @ApiOperation(value = "取得所有課程資訊",
@@ -37,12 +42,17 @@ public class CourseApi extends BaseApi {
         return message;
     }
 
-    // todo
     @ApiOperation(value = "取得課程裡的學生所有資訊",
             notes = "取得courseId，來獲得課程裡的學生所有資訊")
-    @GetMapping(value = "/getStudentInfo")
-    private Message getStudentInfo() {
+    @GetMapping(value = "/getStudentsData")
+    private Message getStudentInfo(String courseId) {
         Message message;
-        return null;
+        try {
+            message = new Message(ApiMessageCode.SUCCESS_STATUS, problemManager.getStudentsData(Long.parseLong(courseId)));
+        } catch (EntityNotFoundException e) {
+            e.printStackTrace();
+            message = new Message(ApiMessageCode.GET_STUDENT_DATA_ERROR, "");
+        }
+        return message;
     }
 }
