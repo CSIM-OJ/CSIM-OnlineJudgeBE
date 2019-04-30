@@ -13,7 +13,7 @@ public interface CopyRepository extends BaseRepository<Copy, Long> {
 
     List<Copy> findByStudentOneAccountOrStudentTwoAccountEquals(String account1, String account2);
 
-    List<Copy> findByStudentTwoAccount(String account);
+    List<Copy> findByProblemAndStudentTwoAccount(Problem problem, String account);
 
     List<Copy> findByProblem(Problem problem);
 }
