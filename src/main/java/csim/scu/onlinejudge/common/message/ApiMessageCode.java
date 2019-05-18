@@ -43,7 +43,10 @@ public enum ApiMessageCode {
     GET_COURSE_FEEDBACK_ERROR("404", "取得課程下的所有回饋失敗"),
     // RankApi
     GET_CORRECT_RANK_ERROR("404", "取得正確解題學生排行失敗"),
-    GET_BEST_CODE_RANK_ERROR("404", "取得最佳解答學生排行失敗");
+    GET_BEST_CODE_RANK_ERROR("404", "取得最佳解答學生排行失敗"),
+    // ProblemBankApi
+    ADD_PROBLEMBANK_ERROR("404", "新增題目失敗"),
+    DELETE_PROBLEMBANK_ERROR("404", "刪除題目失敗");
     
     private String code;
     private String desc;

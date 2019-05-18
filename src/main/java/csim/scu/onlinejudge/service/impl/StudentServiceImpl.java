@@ -75,4 +75,21 @@ public class StudentServiceImpl extends BaseServiceImpl<Student, Long> implement
     public List<String> findDistinctStudentClass() {
         return studentRepository.findDistinctStudentClass();
     }
+
+    @Override
+    public void saveAllStudent(List<Map<String, String>> studentDatas) {
+        List<Student> students = new ArrayList<>();
+        for (Map<String, String> studentData : studentDatas) {
+            String account = studentData.get("account");
+            String password = "0000";
+            String name = studentData.get("name");
+            String studentClass = studentData.get("studentClass");
+
+            Student student = new Student(account, password, name,
+                    studentClass, new ArrayList<>(), new ArrayList<>(),
+                    new ArrayList<>());
+            students.add(student);
+        }
+        saveAll(students);
+    }
 }

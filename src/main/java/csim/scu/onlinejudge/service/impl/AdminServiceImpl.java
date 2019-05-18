@@ -2,12 +2,17 @@ package csim.scu.onlinejudge.service.impl;
 
 import csim.scu.onlinejudge.common.exception.EntityNotFoundException;
 import csim.scu.onlinejudge.dao.domain.admin.Admin;
+import csim.scu.onlinejudge.dao.domain.student.Student;
 import csim.scu.onlinejudge.dao.repository.AdminRepository;
 import csim.scu.onlinejudge.dao.repository.base.BaseRepository;
 import csim.scu.onlinejudge.service.AdminService;
 import csim.scu.onlinejudge.service.base.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class AdminServiceImpl extends BaseServiceImpl<Admin, Long> implements AdminService {
