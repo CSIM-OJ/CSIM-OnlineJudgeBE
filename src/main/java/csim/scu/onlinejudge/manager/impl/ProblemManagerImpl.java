@@ -13,7 +13,6 @@ import csim.scu.onlinejudge.service.ProblemService;
 import csim.scu.onlinejudge.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.rmi.transport.ObjectTable;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
