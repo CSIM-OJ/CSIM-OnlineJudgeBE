@@ -80,6 +80,17 @@ public class CourseManagerImpl implements CourseManager {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteCourseById(Long id) throws EntityNotFoundException {
+        Course course = courseService.findById(id);
+        for (Student student : course.getStudents()) {
+            List<Course> courses = student.getCourses();
+            courses.remove(course);
+            student.setCourses(courses);
+        }
+        for (Assistant assistant : course.getAssistants()) {
+            List<Course> courses = assistant.getCourses();
+            courses.remove(course);
+            assistant.setCourses(courses);
+        }
         courseService.delete(id);
     }
 
