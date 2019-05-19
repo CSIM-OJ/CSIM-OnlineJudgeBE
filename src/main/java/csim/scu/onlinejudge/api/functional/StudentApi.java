@@ -110,8 +110,8 @@ public class StudentApi extends BaseApi {
     @GetMapping(value = "/problemInfo")
     private Message getProblemInfo(String courseId, String type, boolean isJudge, HttpSession session) {
         Message message;
-
         String account = getUserAccount(session);
+        System.out.println(courseId);
         try {
             message = new Message(ApiMessageCode.SUCCESS_STATUS, problemManager.getStudentProblemInfo(Long.parseLong(courseId), type, isJudge, account));
         } catch (EntityNotFoundException e) {
