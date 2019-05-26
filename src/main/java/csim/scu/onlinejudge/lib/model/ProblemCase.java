@@ -15,7 +15,8 @@ public class ProblemCase {
     }
 
     public String[] getInputArray() {
-        String[] result = input.split(" ");
+        // 換行區分參數
+        String[] result = input.split("\n");
         return result;
     }
 

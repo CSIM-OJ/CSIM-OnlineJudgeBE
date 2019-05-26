@@ -45,22 +45,28 @@ public class JudgeCalculator {
 
     public static void writePara(BufferedWriter writer, String[] paras, Language language) {
         try {
-            for (String para : paras) {
-                if (!para.equals("\n")) {
-                    writer.write(para);
-                    switch (language){
-                        case JAVA:
-                            writer.write(" ");
-                            break;
-                        case PYTHON:
-                            writer.newLine();
-                            break;
+            // 只有一個參數，不用多輸入空格
+            if (paras.length == 1) {
+                writer.write(paras[0]);
+            }
+            else {
+                for (String para : paras) {
+                    if (!para.equals("\n")) {
+                        writer.write(para);
+                        switch (language){
+                            case JAVA:
+                                writer.write(" ");
+                                break;
+                            case PYTHON:
+                                writer.newLine();
+                                break;
+                        }
                     }
+                    else {
+                        writer.newLine();
+                    }
+                    writer.flush();
                 }
-                else {
-                    writer.newLine();
-                }
-                writer.flush();
             }
             writer.close();
         } catch (Exception e) {
