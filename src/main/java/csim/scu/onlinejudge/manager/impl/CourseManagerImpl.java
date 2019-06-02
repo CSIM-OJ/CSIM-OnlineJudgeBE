@@ -199,9 +199,9 @@ public class CourseManagerImpl implements CourseManager {
     // 在課程中建立題目
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void createProblem(Long courseId, String name, String type, String category, String[] tag, String description, String inputDesc, String outputDesc, List<TestCase> testCases, Date deadline) throws EntityNotFoundException {
+    public void createProblem(Long courseId, String name, String type, String category, String[] tag, String description, String inputDesc, String outputDesc, String[] keyword, String[] pattern, List<TestCase> testCases, Date deadline) throws EntityNotFoundException {
         Course course = courseService.findById(courseId);
-        Problem problem = new Problem(course, name, type, category, tag, 0,  description, inputDesc, outputDesc, testCases, deadline, 0, 0, 0, "", null, null);
+        Problem problem = new Problem(course, name, type, category, tag, 0,  description, inputDesc, outputDesc, testCases, deadline, 0, 0, 0, "", keyword, pattern, null, null);
         problemService.save(problem);
     }
 

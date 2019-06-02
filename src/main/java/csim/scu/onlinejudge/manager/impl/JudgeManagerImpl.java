@@ -392,6 +392,8 @@ public class JudgeManagerImpl implements JudgeManager {
             String deadline = new SimpleDateFormat("yyyy-MM-dd").format(problem.getDeadline());
             String category = problem.getCategory();
             String[] tag = problem.getTag();
+            String[] keyword = problem.getKeyword();
+            String[] pattern = problem.getPattern();
             String status = decideDeadlineStatus(problem.getDeadline());
             int doneStudentNum = judgeService.countByProblem(problem);
             int undoStudentNum = students.size() - doneStudentNum;
@@ -412,6 +414,8 @@ public class JudgeManagerImpl implements JudgeManager {
             problemResult.put("type", type);
             problemResult.put("category", category);
             problemResult.put("tag", tag);
+            problemResult.put("keyword", keyword);
+            problemResult.put("pattern", pattern);
             problemResult.put("status", status);
             problemResult.put("undoStudentNum", undoStudentNum);
             problemResult.put("doneStudentNum", doneStudentNum);
@@ -460,6 +464,7 @@ public class JudgeManagerImpl implements JudgeManager {
         String code = lastHistoryCode.getCode();
         List<String> symbol = lastHistoryCode.getSymbol();
         List<String> errorInfo = lastHistoryCode.getErrorMessage();
+        List<String> output = lastHistoryCode.getOutput();
 
         boolean isBest = false;
         if (problem.getBestStudentAccount().equals(account)) {
@@ -471,6 +476,8 @@ public class JudgeManagerImpl implements JudgeManager {
         result.put("code", code);
         result.put("symbol", symbol);
         result.put("errorInfo", errorInfo);
+        result.put("output", output);
+        result.put("best", isBest);
 
         List<Copy> copies = copyService.findByProblemAndStudentTwoAccount(problem, account);
         List<Map<String, String>> copyResultList = new ArrayList<>();

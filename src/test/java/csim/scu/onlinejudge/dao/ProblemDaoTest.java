@@ -61,7 +61,9 @@ public class ProblemDaoTest extends OnlineJudgeApplicationTests implements BaseD
                     0,  "描述", "輸入描述",
                     "輸出描述", testCases, date,
                     0, 0, 0,
-                    "", new ArrayList<>(), new ArrayList<>());
+                    "",
+                    new String[]{"if", "while", "for"},
+                    new String[]{"if (bmi < 50)"},new ArrayList<>(), new ArrayList<>());
             Problem result = problemRepository.save(expected);
             assertEquals(expected, result);
         } catch (ParseException e) {
@@ -88,7 +90,9 @@ public class ProblemDaoTest extends OnlineJudgeApplicationTests implements BaseD
                     0,  "描述", "輸入描述",
                     "輸出描述", testCases, date,
                     0, 0, 0,
-                    "", new ArrayList<>(), new ArrayList<>());
+                    "",
+                    new String[]{"if", "while", "for"},
+                    new String[]{"if (bmi < 50)"},new ArrayList<>(), new ArrayList<>());
             problemRepository.save(expected);
             Problem result = problemRepository.findByName("計算速率").get();
             assertEquals(expected, result);
@@ -116,7 +120,9 @@ public class ProblemDaoTest extends OnlineJudgeApplicationTests implements BaseD
                     0,  "描述", "輸入描述",
                     "輸出描述", testCases, date,
                     0, 0, 0,
-                    "", new ArrayList<>(), new ArrayList<>());
+                    "",
+                    new String[]{"if", "while", "for"},
+                    new String[]{"if (bmi < 50)"},new ArrayList<>(), new ArrayList<>());
             problemRepository.save(expected);
             problemRepository.deleteById(expected.getId());
         } catch (ParseException e) {

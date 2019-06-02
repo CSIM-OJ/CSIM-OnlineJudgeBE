@@ -85,7 +85,11 @@ public class ProblemApi extends BaseApi {
         String type = map.get("type").toString();
         String category = map.get("category").toString();
         List<String> tagList = (List<String>) map.get("tag");
+        List<String> keywordList = (List<String>) map.get("keyword");
+        List<String> patternList = (List<String>) map.get("pattern");
         String[] tag = tagList.toArray(new String[tagList.size()]);
+        String[] keyword = keywordList.toArray(new String[keywordList.size()]);
+        String[] pattern = patternList.toArray(new String[patternList.size()]);
         String description = map.get("description").toString();
         String inputDesc = map.get("inputDesc").toString();
         String outputDesc = map.get("outputDesc").toString();
@@ -97,7 +101,8 @@ public class ProblemApi extends BaseApi {
         try {
             courseManager.createProblem(Long.parseLong(courseId), name, type, category,
                     tag, description, inputDesc,
-                    outputDesc, testCases, deadline);
+                    outputDesc, keyword, pattern,
+                    testCases, deadline);
             message = new Message(ApiMessageCode.SUCCESS_STATUS, "");
         } catch (EntityNotFoundException e) {
             e.printStackTrace();
@@ -116,7 +121,11 @@ public class ProblemApi extends BaseApi {
         String type = map.get("type").toString();
         String category = map.get("category").toString();
         List<String> tagList = (List<String>) map.get("tag");
+        List<String> keywordList = (List<String>) map.get("keyword");
+        List<String> patternList = (List<String>) map.get("pattern");
         String[] tag = tagList.toArray(new String[tagList.size()]);
+        String[] keyword = keywordList.toArray(new String[keywordList.size()]);
+        String[] pattern = patternList.toArray(new String[patternList.size()]);
         String description = map.get("description").toString();
         String inputDesc = map.get("inputDesc").toString();
         String outputDesc = map.get("outputDesc").toString();
@@ -128,7 +137,7 @@ public class ProblemApi extends BaseApi {
         try {
             problemService.update(Long.parseLong(problemId), name,
                     type, category, tag, description,
-                    inputDesc, outputDesc, testCases, deadline);
+                    inputDesc, outputDesc, keyword, pattern, testCases, deadline);
             message = new Message(ApiMessageCode.SUCCESS_STATUS, "");
         } catch (EntityNotFoundException e) {
             e.printStackTrace();

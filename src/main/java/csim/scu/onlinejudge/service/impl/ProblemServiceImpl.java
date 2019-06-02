@@ -35,7 +35,8 @@ public class ProblemServiceImpl extends BaseServiceImpl<Problem, Long> implement
     public void update(Long problemId, String name, String type,
                           String category, String[] tag,
                           String description, String inputDesc,
-                          String outputDesc, List<TestCase> testCases,
+                          String outputDesc, String[] keyword,
+                          String[] pattern, List<TestCase> testCases,
                           Date deadline) throws EntityNotFoundException {
         Problem problem = findById(problemId);
         problem.setName(name);
@@ -47,6 +48,8 @@ public class ProblemServiceImpl extends BaseServiceImpl<Problem, Long> implement
         problem.setOutputDesc(outputDesc);
         problem.setTestCases(testCases);
         problem.setDeadline(deadline);
+        problem.setKeyword(keyword);
+        problem.setPattern(pattern);
         problemRepository.save(problem);
     }
 
@@ -66,7 +69,8 @@ public class ProblemServiceImpl extends BaseServiceImpl<Problem, Long> implement
                 problem.getInputDesc(), problem.getOutputDesc(),
                 testCases, problem.getDeadline(),
                 problem.getCorrectNum(), problem.getIncorrectNum(),
-                problem.getCorrectRate(), problem.getBestStudentAccount());
+                problem.getCorrectRate(), problem.getBestStudentAccount(),
+                problem.getKeyword(), problem.getPattern());
         return problemInfo;
     }
 

@@ -49,12 +49,18 @@ public class Problem extends BaseEntity {
     private int incorrectNum;
     private double correctRate;
     private String bestStudentAccount;
+    @Type(type = "string-array")
+    @Column(name = "keyword", columnDefinition = "text[]")
+    private String[] keyword;
+    @Type(type = "string-array")
+    @Column(name = "pattern", columnDefinition = "text[]")
+    private String[] pattern;
     @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Copy> copies;
     @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Judge> judges;
 
-    public Problem(Course course, String name, String type, String category, String[] tag, double rate, String description, String inputDesc, String outputDesc, List<TestCase> testCases, Date deadline, int correctNum, int incorrectNum, double correctRate, String bestStudentAccount, List<Copy> copies, List<Judge> judges) {
+    public Problem(Course course, String name, String type, String category, String[] tag, double rate, String description, String inputDesc, String outputDesc, List<TestCase> testCases, Date deadline, int correctNum, int incorrectNum, double correctRate, String bestStudentAccount, String[] keyword, String[] pattern, List<Copy> copies, List<Judge> judges) {
         this.course = course;
         this.name = name;
         this.type = type;
@@ -72,6 +78,8 @@ public class Problem extends BaseEntity {
         this.bestStudentAccount = bestStudentAccount;
         this.copies = copies;
         this.judges = judges;
+        this.keyword = keyword;
+        this.pattern = pattern;
     }
 
 }

@@ -27,4 +27,6 @@ public class ProblemInfo {
     private int incorrectNum;
     private double correctRate;
     private String bestStudentAccount;
+    private String[] keyword;
+    private String[] pattern;
 }

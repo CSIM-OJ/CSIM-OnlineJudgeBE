@@ -25,7 +25,6 @@ import java.util.List;
 public class ProblemBank extends BaseEntity{
 
     private String name;
-    private String type;
     private String category;
     @Type(type = "string-array")
     @Column(name = "tag", columnDefinition = "text[]")
@@ -37,9 +36,8 @@ public class ProblemBank extends BaseEntity{
     @Column(columnDefinition = "json")
     private List<TestCase> testCases;
 
-    public ProblemBank(String name, String type, String category, String[] tag, String description, String inputDesc, String outputDesc, List<TestCase> testCases) {
+    public ProblemBank(String name, String category, String[] tag, String description, String inputDesc, String outputDesc, List<TestCase> testCases) {
         this.name = name;
-        this.type = type;
         this.category = category;
         this.tag = tag;
         this.description = description;

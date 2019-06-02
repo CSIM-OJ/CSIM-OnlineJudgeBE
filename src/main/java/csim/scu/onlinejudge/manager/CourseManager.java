@@ -33,6 +33,7 @@ public interface CourseManager {
     void createProblem(Long courseId, String name, String type,
                        String category, String[] tag, String description,
                        String inputDesc, String outputDesc,
+                       String[] keyword, String[] pattern,
                        List<TestCase> testCases, Date deadline) throws EntityNotFoundException;
 
     List<Problem> findByCourseId(Long courseId) throws EntityNotFoundException;

@@ -36,7 +36,6 @@ public class ProblemBankApi {
     private Message addProblem(@RequestBody Map<String, Object> map) {
         Message message;
         String name = map.get("name").toString();
-        String type = map.get("type").toString();
         String category = map.get("category").toString();
         List<String> tagList = (List<String>) map.get("tag");
         String[] tag = tagList.toArray(new String[tagList.size()]);
@@ -45,9 +44,33 @@ public class ProblemBankApi {
         String outputDesc = map.get("outputDesc").toString();
         List<TestCase> testCases = (List<TestCase>) map.get("testCases");
 
-        ProblemBank problemBank = new ProblemBank(name, type, category, tag, description, inputDesc, outputDesc, testCases);
+        ProblemBank problemBank = new ProblemBank(name, category, tag, description, inputDesc, outputDesc, testCases);
         problemBankService.save(problemBank);
         message = new Message(ApiMessageCode.SUCCESS_STATUS, "");
+        return message;
+    }
+
+    @ApiOperation(value = "在題庫中編輯題目",
+            notes = "在已存在的題目上進行編輯")
+    @PostMapping(value = "/editProblem")
+    private Message editProblem(@RequestBody Map<String, Object> map) {
+        Message message;
+        Long problemBankId = Long.parseLong(map.get("problemBankId").toString());
+        String name = map.get("name").toString();
+        String category = map.get("category").toString();
+        List<String> tagList = (List<String>) map.get("tag");
+        String[] tag = tagList.toArray(new String[tagList.size()]);
+        String description = map.get("description").toString();
+        String inputDesc = map.get("inputDesc").toString();
+        String outputDesc = map.get("outputDesc").toString();
+        List<TestCase> testCases = (List<TestCase>) map.get("testCases");
+        try {
+            problemBankService.update(problemBankId, name, category, tag, description, inputDesc, outputDesc, testCases);
+            message = new Message(ApiMessageCode.SUCCESS_STATUS, "");
+        } catch (EntityNotFoundException e) {
+            e.printStackTrace();
+            message = new Message(ApiMessageCode.EDIT_PROBLEMBANK_ERROR, "");
+        }
         return message;
     }
 
