@@ -51,8 +51,8 @@ public class ProblemBankApi {
         return message;
     }
 
-    @ApiOperation(value = "在題庫中建立題目",
-            notes = "取得題目資訊，並建立題目")
+    @ApiOperation(value = "在題庫中取得所有題目",
+            notes = "取得所有題目資訊")
     @GetMapping(value = "/getAllProblem")
     private Message getAllProblem() {
         Message message;
@@ -60,8 +60,8 @@ public class ProblemBankApi {
         return message;
     }
 
-    @ApiOperation(value = "在題庫中建立題目",
-            notes = "取得題目資訊，並建立題目")
+    @ApiOperation(value = "在題庫中刪除題目",
+            notes = "刪除題目")
     @PostMapping(value = "/deleteProblem")
     private Message deleteProblem(@RequestBody Map<String, String> map) {
         Message message;
