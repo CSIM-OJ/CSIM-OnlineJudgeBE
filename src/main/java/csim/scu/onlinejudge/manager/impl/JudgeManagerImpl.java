@@ -117,7 +117,7 @@ public class JudgeManagerImpl implements JudgeManager {
                 correctNum++;
             }
             else {
-                if (oriScore == 0) {
+                if (oriScore < 100) {
                     correctNum++;
                     incorrectNum--;
                 }
