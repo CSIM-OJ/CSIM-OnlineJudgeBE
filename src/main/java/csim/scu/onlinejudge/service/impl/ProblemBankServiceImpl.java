@@ -10,7 +10,10 @@ import csim.scu.onlinejudge.service.base.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProblemBankServiceImpl extends BaseServiceImpl<ProblemBank, Long> implements ProblemBankService {
@@ -38,5 +41,21 @@ public class ProblemBankServiceImpl extends BaseServiceImpl<ProblemBank, Long> i
         problemBank.setOutputDesc(outputDesc);
         problemBank.setTestCases(testCases);
         save(problemBank);
+    }
+
+    @Override
+    public List<Map<String, Object>> getAllProblem() {
+        List<Map<String, Object>> result = new ArrayList<>();
+        List<ProblemBank> problemBanks = findAll();
+
+        problemBanks.forEach(problemBank -> {
+            Map<String, Object> problemInfo = new HashMap<>();
+            problemInfo.put("problemBankId", problemBank.getId());
+            problemInfo.put("name", problemBank.getName());
+            problemInfo.put("category", problemBank.getCategory());
+            problemInfo.put("tag", problemBank.getTag());
+            result.add(problemInfo);
+        });
+        return result;
     }
 }

@@ -79,7 +79,21 @@ public class ProblemBankApi {
     @GetMapping(value = "/getAllProblem")
     private Message getAllProblem() {
         Message message;
-        message = new Message(ApiMessageCode.SUCCESS_STATUS, problemBankService.findAll());
+        message = new Message(ApiMessageCode.SUCCESS_STATUS, problemBankService.getAllProblem());
+        return message;
+    }
+
+    @ApiOperation(value = "在題庫中取得題目詳細資訊",
+            notes = "取得題目詳細資訊")
+    @GetMapping(value = "/getProblemInfo")
+    private Message getProblemInfo(String problemBankId) {
+        Message message;
+        try {
+            message = new Message(ApiMessageCode.SUCCESS_STATUS, problemBankService.findById(Long.parseLong(problemBankId)));
+        } catch (EntityNotFoundException e) {
+            e.printStackTrace();
+            message = new Message(ApiMessageCode.GET_PROBLEMBANK_INFO_ERROR, "");
+        }
         return message;
     }
 

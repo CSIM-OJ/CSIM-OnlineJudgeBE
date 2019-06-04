@@ -6,6 +6,8 @@ import csim.scu.onlinejudge.dao.domain.problembank.ProblemBank;
 import csim.scu.onlinejudge.service.base.BaseService;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public interface ProblemBankService extends BaseService<ProblemBank, Long> {
 
@@ -13,4 +15,6 @@ public interface ProblemBankService extends BaseService<ProblemBank, Long> {
                 String category, String[] tag, String description,
                 String inputDesc, String outputDesc,
                 List<TestCase> testCases) throws EntityNotFoundException;
+
+    List<Map<String, Object>> getAllProblem();
 }

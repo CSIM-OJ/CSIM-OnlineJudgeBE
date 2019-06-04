@@ -47,7 +47,8 @@ public enum ApiMessageCode {
     // ProblemBankApi
     ADD_PROBLEMBANK_ERROR("404", "新增題目失敗"),
     DELETE_PROBLEMBANK_ERROR("404", "刪除題目失敗"),
-    EDIT_PROBLEMBANK_ERROR("404", "編輯題目失敗");
+    EDIT_PROBLEMBANK_ERROR("404", "編輯題目失敗"),
+    GET_PROBLEMBANK_INFO_ERROR("404", "取得題目資訊失敗");
     
     private String code;
     private String desc;
