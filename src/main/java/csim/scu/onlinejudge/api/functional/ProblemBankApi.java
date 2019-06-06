@@ -55,7 +55,7 @@ public class ProblemBankApi {
     @PostMapping(value = "/editProblem")
     private Message editProblem(@RequestBody Map<String, Object> map) {
         Message message;
-        Long problemBankId = Long.parseLong(map.get("problemBankId").toString());
+        Long problemBankId = Long.parseLong(map.get("id").toString());
         String name = map.get("name").toString();
         String category = map.get("category").toString();
         List<String> tagList = (List<String>) map.get("tag");
@@ -86,10 +86,10 @@ public class ProblemBankApi {
     @ApiOperation(value = "在題庫中取得題目詳細資訊",
             notes = "取得題目詳細資訊")
     @GetMapping(value = "/getProblemInfo")
-    private Message getProblemInfo(String problemBankId) {
+    private Message getProblemInfo(String id) {
         Message message;
         try {
-            message = new Message(ApiMessageCode.SUCCESS_STATUS, problemBankService.findById(Long.parseLong(problemBankId)));
+            message = new Message(ApiMessageCode.SUCCESS_STATUS, problemBankService.findById(Long.parseLong(id)));
         } catch (EntityNotFoundException e) {
             e.printStackTrace();
             message = new Message(ApiMessageCode.GET_PROBLEMBANK_INFO_ERROR, "");
@@ -102,7 +102,7 @@ public class ProblemBankApi {
     @PostMapping(value = "/deleteProblem")
     private Message deleteProblem(@RequestBody Map<String, String> map) {
         Message message;
-        Long problemBankId = Long.parseLong(map.get("problemBankId"));
+        Long problemBankId = Long.parseLong(map.get("id"));
         try {
             problemBankService.delete(problemBankId);
             message = new Message(ApiMessageCode.SUCCESS_STATUS, "");

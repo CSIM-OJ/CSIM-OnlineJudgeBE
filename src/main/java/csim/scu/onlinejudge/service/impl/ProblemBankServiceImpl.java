@@ -50,7 +50,7 @@ public class ProblemBankServiceImpl extends BaseServiceImpl<ProblemBank, Long> i
 
         problemBanks.forEach(problemBank -> {
             Map<String, Object> problemInfo = new HashMap<>();
-            problemInfo.put("problemBankId", problemBank.getId());
+            problemInfo.put("id", problemBank.getId());
             problemInfo.put("name", problemBank.getName());
             problemInfo.put("category", problemBank.getCategory());
             problemInfo.put("tag", problemBank.getTag());
