@@ -38,7 +38,7 @@ public class ProblemDaoTest extends OnlineJudgeApplicationTests implements BaseD
         teacherRepository.save(teacher);
         course = new Course(teacher, "計算機程式設計",
                 "104上", new ArrayList<>(), new ArrayList<>(),
-                new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                new ArrayList<>(), new ArrayList<>());
         courseRepository.save(course);
     }
 
@@ -63,7 +63,9 @@ public class ProblemDaoTest extends OnlineJudgeApplicationTests implements BaseD
                     0, 0, 0,
                     "",
                     new String[]{"if", "while", "for"},
-                    new String[]{"if (bmi < 50)"},new ArrayList<>(), new ArrayList<>());
+                    new String[]{"if (bmi < 50)"},
+                    new ArrayList<>(), new ArrayList<>(),
+                    new ArrayList<>());
             Problem result = problemRepository.save(expected);
             assertEquals(expected, result);
         } catch (ParseException e) {
@@ -92,7 +94,9 @@ public class ProblemDaoTest extends OnlineJudgeApplicationTests implements BaseD
                     0, 0, 0,
                     "",
                     new String[]{"if", "while", "for"},
-                    new String[]{"if (bmi < 50)"},new ArrayList<>(), new ArrayList<>());
+                    new String[]{"if (bmi < 50)"},
+                    new ArrayList<>(), new ArrayList<>(),
+                    new ArrayList<>());
             problemRepository.save(expected);
             Problem result = problemRepository.findByName("計算速率").get();
             assertEquals(expected, result);
@@ -122,7 +126,9 @@ public class ProblemDaoTest extends OnlineJudgeApplicationTests implements BaseD
                     0, 0, 0,
                     "",
                     new String[]{"if", "while", "for"},
-                    new String[]{"if (bmi < 50)"},new ArrayList<>(), new ArrayList<>());
+                    new String[]{"if (bmi < 50)"},
+                    new ArrayList<>(), new ArrayList<>(),
+                    new ArrayList<>());
             problemRepository.save(expected);
             problemRepository.deleteById(expected.getId());
         } catch (ParseException e) {

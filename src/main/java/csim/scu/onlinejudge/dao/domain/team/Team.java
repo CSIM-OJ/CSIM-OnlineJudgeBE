@@ -4,6 +4,7 @@ import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import csim.scu.onlinejudge.dao.domain.base.BaseEntity;
 import csim.scu.onlinejudge.dao.domain.course.Course;
+import csim.scu.onlinejudge.dao.domain.problem.Problem;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,7 +15,6 @@ import javax.persistence.*;
 import java.util.List;
 
 @TypeDefs({
-        @TypeDef(name = "string-array", typeClass = StringArrayType.class),
         @TypeDef(name = "json", typeClass = JsonStringType.class)})
 @Entity
 @NoArgsConstructor
@@ -23,14 +23,17 @@ import java.util.List;
 public class Team extends BaseEntity {
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, optional = false)
-    @JoinColumn(name = "course_id")
-    private Course course;
+    @JoinColumn(name = "problem_id")
+    private Problem problem;
+    private String studentAccount;
     @Type(type = "json")
     @Column(columnDefinition = "json")
-    private List<String> members;
+    private List<CommentResult> commentResults;
+    private double score;
 
-    public Team(Course course, List<String> members) {
-        this.course = course;
-        this.members = members;
+    public Team(Problem problem, String studentAccount, List<CommentResult> commentResults) {
+        this.problem = problem;
+        this.studentAccount = studentAccount;
+        this.commentResults = commentResults;
     }
 }

@@ -33,7 +33,7 @@ public class CourseDaoTest extends OnlineJudgeApplicationTests implements BaseDa
     public void save() {
         Course course = new Course(teacher, "計算機程式設計",
                 "104上", new ArrayList<>(), new ArrayList<>(),
-                new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                new ArrayList<>(), new ArrayList<>());
         courseRepository.save(course);
     }
 
@@ -43,7 +43,7 @@ public class CourseDaoTest extends OnlineJudgeApplicationTests implements BaseDa
     public void find() {
         Course expected = new Course(teacher, "計算機程式設計",
                 "104上", new ArrayList<>(), new ArrayList<>(),
-                new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                new ArrayList<>(), new ArrayList<>());
         courseRepository.save(expected);
         Course result = courseRepository.findByName("計算機程式設計").get();
         assertEquals(expected, result);
@@ -55,7 +55,7 @@ public class CourseDaoTest extends OnlineJudgeApplicationTests implements BaseDa
     public void delete() {
         Course expected = new Course(teacher, "計算機程式設計",
                 "104上", new ArrayList<>(), new ArrayList<>(),
-                new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                new ArrayList<>(), new ArrayList<>());
         courseRepository.save(expected);
         courseRepository.deleteById(expected.getId());
     }

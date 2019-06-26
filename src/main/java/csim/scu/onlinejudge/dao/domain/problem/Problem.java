@@ -6,6 +6,7 @@ import csim.scu.onlinejudge.dao.domain.base.BaseEntity;
 import csim.scu.onlinejudge.dao.domain.copy.Copy;
 import csim.scu.onlinejudge.dao.domain.course.Course;
 import csim.scu.onlinejudge.dao.domain.judge.Judge;
+import csim.scu.onlinejudge.dao.domain.team.Team;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -59,8 +60,10 @@ public class Problem extends BaseEntity {
     private List<Copy> copies;
     @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Judge> judges;
+    @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Team> teams;
 
-    public Problem(Course course, String name, String type, String category, String[] tag, double rate, String description, String inputDesc, String outputDesc, List<TestCase> testCases, Date deadline, int correctNum, int incorrectNum, double correctRate, String bestStudentAccount, String[] keyword, String[] pattern, List<Copy> copies, List<Judge> judges) {
+    public Problem(Course course, String name, String type, String category, String[] tag, double rate, String description, String inputDesc, String outputDesc, List<TestCase> testCases, Date deadline, int correctNum, int incorrectNum, double correctRate, String bestStudentAccount, String[] keyword, String[] pattern, List<Copy> copies, List<Judge> judges, List<Team> teams) {
         this.course = course;
         this.name = name;
         this.type = type;
@@ -80,6 +83,7 @@ public class Problem extends BaseEntity {
         this.judges = judges;
         this.keyword = keyword;
         this.pattern = pattern;
+        this.teams = teams;
     }
 
 }

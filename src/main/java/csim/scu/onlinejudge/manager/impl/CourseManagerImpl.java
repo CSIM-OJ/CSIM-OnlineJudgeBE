@@ -57,7 +57,7 @@ public class CourseManagerImpl implements CourseManager {
     @Override
     public Course createCourse(String account, String courseName, String semester, String studentClass, List<String> taList) throws EntityNotFoundException {
         Teacher teacher = teacherService.findByAccount(account);
-        Course course = new Course(teacher, courseName, semester, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        Course course = new Course(teacher, courseName, semester, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         course = courseService.save(course);
 
         for (String taAccount : taList) {
@@ -201,7 +201,7 @@ public class CourseManagerImpl implements CourseManager {
     @Override
     public void createProblem(Long courseId, String name, String type, String category, String[] tag, String description, String inputDesc, String outputDesc, String[] keyword, String[] pattern, List<TestCase> testCases, Date deadline) throws EntityNotFoundException {
         Course course = courseService.findById(courseId);
-        Problem problem = new Problem(course, name, type, category, tag, 0,  description, inputDesc, outputDesc, testCases, deadline, 0, 0, 0, "", keyword, pattern, null, null);
+        Problem problem = new Problem(course, name, type, category, tag, 0,  description, inputDesc, outputDesc, testCases, deadline, 0, 0, 0, "", keyword, pattern, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         problemService.save(problem);
     }
 

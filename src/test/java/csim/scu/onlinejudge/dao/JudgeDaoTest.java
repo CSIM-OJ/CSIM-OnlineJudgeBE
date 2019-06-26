@@ -48,7 +48,7 @@ public class JudgeDaoTest extends OnlineJudgeApplicationTests implements BaseDao
         teacherRepository.save(teacher);
         Course course = new Course(teacher, "計算機程式設計",
                 "104上", new ArrayList<>(), new ArrayList<>(),
-                new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                new ArrayList<>(), new ArrayList<>());
         courseRepository.save(course);
 
         List<TestCase> testCases = Arrays.asList(
@@ -68,7 +68,8 @@ public class JudgeDaoTest extends OnlineJudgeApplicationTests implements BaseDao
                     0, 0, 0, "",
                     new String[]{"if", "while", "for"},
                     new String[]{"if (bmi < 50)"},
-                    new ArrayList<>(), new ArrayList<>());
+                    new ArrayList<>(), new ArrayList<>(),
+                    new ArrayList<>());
             problemRepository.save(problem);
         } catch (ParseException e) {
             e.printStackTrace();

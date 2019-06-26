@@ -35,18 +35,15 @@ public class Course extends BaseEntity {
     @JsonIgnoreProperties("courses")
     private List<Assistant> assistants;
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Team> teams;
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Feedback> feedbacks;
 
-    public Course(Teacher teacher, String name, String semester, List<Problem> problems, List<Student> students, List<Assistant> assistants, List<Team> teams, List<Feedback> feedbacks) {
+    public Course(Teacher teacher, String name, String semester, List<Problem> problems, List<Student> students, List<Assistant> assistants, List<Feedback> feedbacks) {
         this.teacher = teacher;
         this.name = name;
         this.semester = semester;
         this.problems = problems;
         this.students = students;
         this.assistants = assistants;
-        this.teams = teams;
         this.feedbacks = feedbacks;
     }
 
