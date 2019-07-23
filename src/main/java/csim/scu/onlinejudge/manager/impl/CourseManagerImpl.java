@@ -85,11 +85,13 @@ public class CourseManagerImpl implements CourseManager {
             List<Course> courses = student.getCourses();
             courses.remove(course);
             student.setCourses(courses);
+            studentService.save(student);
         }
         for (Assistant assistant : course.getAssistants()) {
             List<Course> courses = assistant.getCourses();
             courses.remove(course);
             assistant.setCourses(courses);
+            assistantService.save(assistant);
         }
         courseService.delete(id);
     }
@@ -177,20 +179,24 @@ public class CourseManagerImpl implements CourseManager {
 
     // 教授取得自身創建的所有課程資訊
     @Override
-    public List<Map<String, String>> getCoursesInfo(String account) throws EntityNotFoundException {
+    public List<Map<String, Object>> getCoursesInfo(String account) throws EntityNotFoundException {
         Teacher teacher = teacherService.findByAccount(account);
         List<Course> courses = teacher.getCourses();
-        List<Map<String, String>> result = new ArrayList<>();
+        List<Map<String, Object>> result = new ArrayList<>();
         for (Course course : courses) {
-            Map<String, String> courseInfoResult = new HashMap<>();
+            Map<String, Object> courseInfoResult = new HashMap<>();
             String courseId = String.valueOf(course.getId());
             String courseName = course.getName();
             String teacherName = teacher.getName();
             String semester = course.getSemester();
+            List<String> distinctClass = studentService.findDistinctStudentClassByCourseId(course.getId());
+            List<String> taList = assistantService.findAssistantAccountByCourseId(course.getId());
             courseInfoResult.put("courseId", courseId);
             courseInfoResult.put("courseName", courseName);
             courseInfoResult.put("teacherName", teacherName);
             courseInfoResult.put("semester", semester);
+            courseInfoResult.put("class", distinctClass);
+            courseInfoResult.put("taList", taList);
             result.add(courseInfoResult);
         }
         return result;
@@ -199,10 +205,14 @@ public class CourseManagerImpl implements CourseManager {
     // 在課程中建立題目
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void createProblem(Long courseId, String name, String type, String category, String[] tag, String description, String inputDesc, String outputDesc, String[] keyword, String[] pattern, List<TestCase> testCases, Date deadline) throws EntityNotFoundException {
+    public Map<String, String> createProblem(Long courseId, String name, String type, String category, String[] tag, String description, String inputDesc, String outputDesc, String[] pattern, List<TestCase> testCases, Date deadline) throws EntityNotFoundException {
         Course course = courseService.findById(courseId);
-        Problem problem = new Problem(course, name, type, category, tag, 0,  description, inputDesc, outputDesc, testCases, deadline, 0, 0, 0, "", keyword, pattern, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        Problem problem = new Problem(course, name, type, category, tag, 0,  description, inputDesc, outputDesc, testCases, deadline, 0, 0, 0, "", pattern, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         problemService.save(problem);
+
+        Map<String, String> result = new HashMap<>();
+        result.put("problemId", String.valueOf(problem.getId()));
+        return result;
     }
 
     // 利用課程Id找到該課程下的所有題目
@@ -319,21 +329,51 @@ public class CourseManagerImpl implements CourseManager {
         return results;
     }
 
-    // 取得目前所有課程列表資訊
     @Override
-    public List<Map<String, String>> getCoursesInfo() {
-        List<Course> courses = courseService.findAll();
-        List<Map<String, String>> results = new ArrayList<>();
+    public void editCourse(String account, Long courseId, String courseName, String semester, List<String> taList) throws EntityNotFoundException {
+        Teacher teacher = teacherService.findByAccount(account);
+        Course course = courseService.findById(courseId);
 
-        for (Course course : courses) {
-            Map<String, String> map = new HashMap<>();
-            Teacher teacher = course.getTeacher();
-            map.put("courseId", String.valueOf(course.getId()));
-            map.put("courseName", course.getName());
-            map.put("teacherName", teacher.getName());
-            map.put("semester", course.getSemester());
-            results.add(map);
+        for (Assistant assistant : course.getAssistants()) {
+            assistant.setCourses(new ArrayList<>());
+            assistantService.save(assistant);
         }
-        return results;
+        for (String taAccount : taList) {
+            Assistant assistant = assistantService.findByAccount(taAccount);
+            List<Course> courses = assistant.getCourses();
+            courses.add(course);
+            assistantService.save(assistant);
+        }
+        course.setName(courseName);
+        course.setSemester(semester);
+        courseService.save(course);
+    }
+
+    @Override
+    public List<Map<String, Object>> getCoursesInfoByAssistantAccount(String account) throws EntityNotFoundException {
+        Assistant assistant = assistantService.findByAccount(account);
+        List<Course> courses = assistant.getCourses();
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (Course course : courses) {
+            Map<String, Object> courseInfoResult = new HashMap<>();
+            Teacher teacher = course.getTeacher();
+            String courseId = String.valueOf(course.getId());
+            String courseName = course.getName();
+            String teacherName = teacher.getName();
+            String semester = course.getSemester();
+            List<String> distinctClass = studentService.findDistinctStudentClassByCourseId(course.getId());
+            courseInfoResult.put("courseId", courseId);
+            courseInfoResult.put("courseName", courseName);
+            courseInfoResult.put("teacherName", teacherName);
+            courseInfoResult.put("semester", semester);
+            courseInfoResult.put("class", distinctClass);
+            result.add(courseInfoResult);
+        }
+        return result;
+    }
+
+    @Override
+    public List<String> findAllStudentAccountByCourseId(Long courseId) {
+        return studentService.findStudentAccountByCourseId(courseId);
     }
 }

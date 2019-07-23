@@ -5,14 +5,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class CommentResult {
+public class CommentResult implements Serializable {
 
     private String account;
-    private double rate;
-    private String comment;
+    private int score;
+    private int correctValue;
+    private int readValue;
+    private int skillValue;
+    private int completeValue;
+    private int wholeValue;
 
 }

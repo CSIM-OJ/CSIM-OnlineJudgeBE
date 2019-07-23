@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -24,4 +25,6 @@ public interface AssistantRepository extends BaseRepository<Assistant, Long> {
                                            @Param("oriPassword")String oriPassword,
                                            @Param("newPassword")String newPassword);
 
+    @Query("select a.account from Assistant a inner join a.courses as c where c.id=:courseId")
+    List<String> findAssistantAccountByCourseId(@Param("courseId") Long courseId);
 }

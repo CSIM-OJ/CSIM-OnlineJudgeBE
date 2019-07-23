@@ -92,4 +92,14 @@ public class StudentServiceImpl extends BaseServiceImpl<Student, Long> implement
         }
         saveAll(students);
     }
+
+    @Override
+    public List<String> findDistinctStudentClassByCourseId(Long courseId) {
+        return studentRepository.findDistinctStudentClassByCourseId(courseId);
+    }
+
+    @Override
+    public List<String> findStudentAccountByCourseId(Long courseId) {
+        return studentRepository.findAccountByCourseId(courseId);
+    }
 }

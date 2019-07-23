@@ -66,7 +66,6 @@ public class JudgeDaoTest extends OnlineJudgeApplicationTests implements BaseDao
                     0,  "描述", "輸入描述",
                     "輸出描述", testCases, date,
                     0, 0, 0, "",
-                    new String[]{"if", "while", "for"},
                     new String[]{"if (bmi < 50)"},
                     new ArrayList<>(), new ArrayList<>(),
                     new ArrayList<>());

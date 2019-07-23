@@ -14,6 +14,8 @@ public enum ApiMessageCode {
     GET_HISTORY_SCORE_ERROR("404", "取得歷史成績失敗"),
     GET_STUDENT_PROBLEM_INFO_ERROR("404", "取得題目資訊失敗"),
     UPDATE_STUDENT_PROBLEM_RATE_ERROR("404", "更新題目的難易度失敗"),
+    // AssistantApi
+    AS_GET_COURSE_LIST_ERROR("404", "取得助教所有課程失敗"),
     // TeacherApi
     CREATE_COURSE_ERROR("404", "創建課程失敗"),
     DELETE_COURSE_ERROR("404", "刪除課程失敗"),
@@ -38,6 +40,9 @@ public enum ApiMessageCode {
     // CourseApi
     GET_COURSES_INFO_ERROR("404", "取得課程資訊失敗"),
     GET_STUDENT_DATA_ERROR("404", "取得課程的所有學生成績失敗"),
+    DEL_COURSE_ERROR("404", "刪除課程失敗"),
+    EDIT_COURSE_ERROR("404", "編輯課程失敗"),
+    ALL_STUD_ERROR("404", "取得課程下的所有學生學號失敗"),
     // FeedbackApi
     ADD_FEEDBACK_ERROR("404", "新增回饋失敗"),
     GET_COURSE_FEEDBACK_ERROR("404", "取得課程下的所有回饋失敗"),
@@ -48,7 +53,13 @@ public enum ApiMessageCode {
     ADD_PROBLEMBANK_ERROR("404", "新增題目失敗"),
     DELETE_PROBLEMBANK_ERROR("404", "刪除題目失敗"),
     EDIT_PROBLEMBANK_ERROR("404", "編輯題目失敗"),
-    GET_PROBLEMBANK_INFO_ERROR("404", "取得題目資訊失敗");
+    GET_PROBLEMBANK_INFO_ERROR("404", "取得題目資訊失敗"),
+    // TeamApi
+    CREATE_TEAM_ERROR("404", "創建隊伍失敗"),
+    CORRECT_STUDS_ERROR("404", "取得學生要批改的對象失敗"),
+    CHECK_CORRECT_STATUS_ERROR("404", "取得此學生是否已經完成互評失敗"),
+    CORRECTED_INFO_ERROR("404", "取得此學生批改對方的資訊失敗"),
+    SUBMIT_CORRECT_ERROR("404", "送出評分資訊失敗");
     
     private String code;
     private String desc;

@@ -28,12 +28,11 @@ public interface CourseManager {
 
     void deleteAssistantListFromCourse(Long courseId, List<String> accounts) throws EntityNotFoundException;
 
-    List<Map<String, String>> getCoursesInfo(String account) throws EntityNotFoundException;
+    List<Map<String, Object>> getCoursesInfo(String account) throws EntityNotFoundException;
 
-    void createProblem(Long courseId, String name, String type,
+    Map<String, String> createProblem(Long courseId, String name, String type,
                        String category, String[] tag, String description,
-                       String inputDesc, String outputDesc,
-                       String[] keyword, String[] pattern,
+                       String inputDesc, String outputDesc, String[] pattern,
                        List<TestCase> testCases, Date deadline) throws EntityNotFoundException;
 
     List<Problem> findByCourseId(Long courseId) throws EntityNotFoundException;
@@ -46,5 +45,9 @@ public interface CourseManager {
 
     List<Map<String, String>> getStudentCoursesInfo(String account) throws EntityNotFoundException;
 
-    List<Map<String, String>> getCoursesInfo();
+    void editCourse(String account, Long courseId, String courseName, String semester, List<String> taList)  throws EntityNotFoundException;
+
+    List<Map<String, Object>> getCoursesInfoByAssistantAccount(String account) throws EntityNotFoundException;
+
+    List<String> findAllStudentAccountByCourseId(Long courseId);
 }

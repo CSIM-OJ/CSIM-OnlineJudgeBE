@@ -2,16 +2,16 @@ package csim.scu.onlinejudge.api.functional;
 
 import csim.scu.onlinejudge.api.base.BaseMethod;
 import csim.scu.onlinejudge.api.base.BaseApi;
+import csim.scu.onlinejudge.common.exception.EntityNotFoundException;
+import csim.scu.onlinejudge.common.message.ApiMessageCode;
 import csim.scu.onlinejudge.common.message.Message;
 import csim.scu.onlinejudge.manager.CourseManager;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 @Api(value = "AssistantApi", description = "助教的相關Api")
@@ -38,5 +38,20 @@ public class AssistantApi extends BaseApi {
     @PostMapping(value = "/deleteStudentList")
     private Message deleteStudentList(@RequestBody Map<String, Object> map) {
         return BaseMethod.deleteStudentList(map, courseManager);
+    }
+
+    @ApiOperation(value = "取得助教的所有課程",
+            notes = "取得account，並取得助教的所有課程")
+    @GetMapping(value = "/courseList")
+    private Message courseList(HttpSession session) {
+        String account = getUserAccount(session);
+        Message message;
+        try {
+            message = new Message(ApiMessageCode.SUCCESS_STATUS, courseManager.getCoursesInfoByAssistantAccount(account));
+        } catch (EntityNotFoundException e) {
+            e.printStackTrace();
+            message = new Message(ApiMessageCode.AS_GET_COURSE_LIST_ERROR, "");
+        }
+        return message;
     }
 }

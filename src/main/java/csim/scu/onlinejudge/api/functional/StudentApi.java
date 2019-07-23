@@ -111,7 +111,6 @@ public class StudentApi extends BaseApi {
     private Message getProblemInfo(String courseId, String type, boolean isJudge, HttpSession session) {
         Message message;
         String account = getUserAccount(session);
-        System.out.println(courseId);
         try {
             message = new Message(ApiMessageCode.SUCCESS_STATUS, problemManager.getStudentProblemInfo(Long.parseLong(courseId), type, isJudge, account));
         } catch (EntityNotFoundException e) {
@@ -142,6 +141,15 @@ public class StudentApi extends BaseApi {
             e.printStackTrace();
             message = new Message(ApiMessageCode.UPDATE_STUDENT_PROBLEM_RATE_ERROR, "");
         }
+        return message;
+    }
+
+    @ApiOperation(value = "課程下的所有學生學號",
+            notes = "取得courseId，來獲得課程下的所有學生學號")
+    @GetMapping(value = "/allStud")
+    private Message allStudent(String courseId) {
+        Message message;
+        message = new Message(ApiMessageCode.SUCCESS_STATUS, courseManager.findAllStudentAccountByCourseId(Long.parseLong(courseId)));
         return message;
     }
 }

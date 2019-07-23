@@ -392,7 +392,6 @@ public class JudgeManagerImpl implements JudgeManager {
             String deadline = new SimpleDateFormat("yyyy-MM-dd").format(problem.getDeadline());
             String category = problem.getCategory();
             String[] tag = problem.getTag();
-            String[] keyword = problem.getKeyword();
             String[] pattern = problem.getPattern();
             String status = decideDeadlineStatus(problem.getDeadline());
             int doneStudentNum = judgeService.countByProblem(problem);
@@ -414,7 +413,6 @@ public class JudgeManagerImpl implements JudgeManager {
             problemResult.put("type", type);
             problemResult.put("category", category);
             problemResult.put("tag", tag);
-            problemResult.put("keyword", keyword);
             problemResult.put("pattern", pattern);
             problemResult.put("status", status);
             problemResult.put("undoStudentNum", undoStudentNum);

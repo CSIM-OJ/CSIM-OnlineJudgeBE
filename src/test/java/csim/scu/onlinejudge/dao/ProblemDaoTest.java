@@ -62,7 +62,6 @@ public class ProblemDaoTest extends OnlineJudgeApplicationTests implements BaseD
                     "輸出描述", testCases, date,
                     0, 0, 0,
                     "",
-                    new String[]{"if", "while", "for"},
                     new String[]{"if (bmi < 50)"},
                     new ArrayList<>(), new ArrayList<>(),
                     new ArrayList<>());
@@ -93,7 +92,6 @@ public class ProblemDaoTest extends OnlineJudgeApplicationTests implements BaseD
                     "輸出描述", testCases, date,
                     0, 0, 0,
                     "",
-                    new String[]{"if", "while", "for"},
                     new String[]{"if (bmi < 50)"},
                     new ArrayList<>(), new ArrayList<>(),
                     new ArrayList<>());
@@ -125,7 +123,6 @@ public class ProblemDaoTest extends OnlineJudgeApplicationTests implements BaseD
                     "輸出描述", testCases, date,
                     0, 0, 0,
                     "",
-                    new String[]{"if", "while", "for"},
                     new String[]{"if (bmi < 50)"},
                     new ArrayList<>(), new ArrayList<>(),
                     new ArrayList<>());

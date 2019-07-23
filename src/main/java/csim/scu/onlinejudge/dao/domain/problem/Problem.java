@@ -51,9 +51,6 @@ public class Problem extends BaseEntity {
     private double correctRate;
     private String bestStudentAccount;
     @Type(type = "string-array")
-    @Column(name = "keyword", columnDefinition = "text[]")
-    private String[] keyword;
-    @Type(type = "string-array")
     @Column(name = "pattern", columnDefinition = "text[]")
     private String[] pattern;
     @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -63,7 +60,7 @@ public class Problem extends BaseEntity {
     @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Team> teams;
 
-    public Problem(Course course, String name, String type, String category, String[] tag, double rate, String description, String inputDesc, String outputDesc, List<TestCase> testCases, Date deadline, int correctNum, int incorrectNum, double correctRate, String bestStudentAccount, String[] keyword, String[] pattern, List<Copy> copies, List<Judge> judges, List<Team> teams) {
+    public Problem(Course course, String name, String type, String category, String[] tag, double rate, String description, String inputDesc, String outputDesc, List<TestCase> testCases, Date deadline, int correctNum, int incorrectNum, double correctRate, String bestStudentAccount, String[] pattern, List<Copy> copies, List<Judge> judges, List<Team> teams) {
         this.course = course;
         this.name = name;
         this.type = type;
@@ -81,7 +78,6 @@ public class Problem extends BaseEntity {
         this.bestStudentAccount = bestStudentAccount;
         this.copies = copies;
         this.judges = judges;
-        this.keyword = keyword;
         this.pattern = pattern;
         this.teams = teams;
     }

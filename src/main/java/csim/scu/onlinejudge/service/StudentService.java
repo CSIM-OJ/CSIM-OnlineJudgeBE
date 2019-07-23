@@ -25,4 +25,8 @@ public interface StudentService extends BaseService<Student, Long> {
     List<String> findDistinctStudentClass();
 
     void saveAllStudent(List<Map<String, String>> studentDatas);
+
+    List<String> findDistinctStudentClassByCourseId(Long courseId);
+
+    List<String> findStudentAccountByCourseId(Long courseId);
 }

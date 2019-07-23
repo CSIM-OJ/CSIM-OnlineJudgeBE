@@ -16,4 +16,6 @@ public interface AssistantService extends BaseService<Assistant, Long> {
     int updatePasswordByAccount(String account, String oriPassword, String newPassword);
 
     List<AssistantInfo> getAssistantListInfo();
+
+    List<String> findAssistantAccountByCourseId(Long courseId);
 }

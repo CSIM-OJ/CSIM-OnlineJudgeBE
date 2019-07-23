@@ -32,4 +32,10 @@ public interface StudentRepository extends BaseRepository<Student, Long> {
 
     @Query("select distinct s.studentClass from Student s")
     List<String> findDistinctStudentClass();
+
+    @Query("select distinct s.studentClass from Student s inner join s.courses as c where c.id=:courseId")
+    List<String> findDistinctStudentClassByCourseId(@Param("courseId") Long courseId);
+
+    @Query("select s.account from Student s inner join s.courses as c where c.id=:courseId")
+    List<String> findAccountByCourseId(@Param("courseId") Long courseId);
 }

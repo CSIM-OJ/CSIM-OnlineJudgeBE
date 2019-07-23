@@ -14,7 +14,7 @@ public interface ProblemService extends BaseService<Problem, Long> {
 
     void update(Long problemId, String name, String type,
                    String category, String[] tag, String description,
-                   String inputDesc, String outputDesc, String[] keyword,
+                   String inputDesc, String outputDesc,
                    String[] pattern,
                    List<TestCase> testCases, Date deadline) throws EntityNotFoundException;
 
