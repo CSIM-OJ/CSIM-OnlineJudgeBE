@@ -2,6 +2,7 @@ package csim.scu.onlinejudge.manager.impl;
 
 import csim.scu.onlinejudge.common.exception.EntityNotFoundException;
 import csim.scu.onlinejudge.dao.domain.assistant.Assistant;
+import csim.scu.onlinejudge.dao.domain.assistant.AssistantInfo;
 import csim.scu.onlinejudge.dao.domain.course.Course;
 import csim.scu.onlinejudge.dao.domain.course.CourseInfo;
 import csim.scu.onlinejudge.dao.domain.feedback.Feedback;
@@ -190,7 +191,7 @@ public class CourseManagerImpl implements CourseManager {
             String teacherName = teacher.getName();
             String semester = course.getSemester();
             List<String> distinctClass = studentService.findDistinctStudentClassByCourseId(course.getId());
-            List<String> taList = assistantService.findAssistantAccountByCourseId(course.getId());
+            List<AssistantInfo> taList = assistantService.findAssistantInfoByCourseId(course.getId());
             courseInfoResult.put("courseId", courseId);
             courseInfoResult.put("courseName", courseName);
             courseInfoResult.put("teacherName", teacherName);

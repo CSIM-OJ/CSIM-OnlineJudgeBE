@@ -26,6 +26,7 @@ public enum ApiMessageCode {
     GET_COURSE_INFO_ERROR("404", "取得課程列表失敗"),
     GET_STUDENT_CLASS_LIST_ERROR("404", "取得學生班級列表失敗"),
     GET_ASSISTANT_LIST_ERROR("404", "取得助教名單失敗"),
+    GET_UNASSIGNASSISTANT_LIST_ERROR("404", "取得未被指派助教名單失敗"),
     // ProblemApi
     GET_PROBLEM_INFO_ERROR("404", "取得題目資訊失敗"),
     GET_PROBLEMS_INFO_ERROR("404", "取得課程下的所有題目資訊失敗"),
@@ -58,8 +59,11 @@ public enum ApiMessageCode {
     CREATE_TEAM_ERROR("404", "創建隊伍失敗"),
     CORRECT_STUDS_ERROR("404", "取得學生要批改的對象失敗"),
     CHECK_CORRECT_STATUS_ERROR("404", "取得此學生是否已經完成互評失敗"),
-    CORRECTED_INFO_ERROR("404", "取得此學生批改對方的資訊失敗"),
-    SUBMIT_CORRECT_ERROR("404", "送出評分資訊失敗");
+    CHECK_CORRECTED_STATUS_ERROR("404", "取得此學生是否已經被互評完成失敗"),
+    CORRECT_INFO_ERROR("404", "取得此學生批改對方的資訊失敗"),
+    CORRECTED_INFO_ERROR("404", "取得此學生被批改的資訊失敗"),
+    SUBMIT_CORRECT_ERROR("404", "送出評分資訊失敗"),
+    DISCUSS_SCORE_ERROR("404", "取得互評成績失敗");
     
     private String code;
     private String desc;

@@ -17,5 +17,7 @@ public interface AssistantService extends BaseService<Assistant, Long> {
 
     List<AssistantInfo> getAssistantListInfo();
 
-    List<String> findAssistantAccountByCourseId(Long courseId);
+    List<AssistantInfo> findAssistantInfoByCourseId(Long courseId);
+
+    List<AssistantInfo> findunassignAssistantInfoByCourseId(Long courseId);
 }

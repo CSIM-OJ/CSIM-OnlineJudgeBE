@@ -55,7 +55,12 @@ public class AssistantServiceImpl extends BaseServiceImpl<Assistant, Long> imple
     }
 
     @Override
-    public List<String> findAssistantAccountByCourseId(Long courseId) {
-        return assistantRepository.findAssistantAccountByCourseId(courseId);
+    public List<AssistantInfo> findAssistantInfoByCourseId(Long courseId) {
+        return assistantRepository.findAssistantInfoByCourseId(courseId);
+    }
+
+    @Override
+    public List<AssistantInfo> findunassignAssistantInfoByCourseId(Long courseId) {
+        return assistantRepository.findunassignAssistantInfoByCourseId(courseId);
     }
 }

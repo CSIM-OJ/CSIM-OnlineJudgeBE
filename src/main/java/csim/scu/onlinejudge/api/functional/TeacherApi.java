@@ -152,7 +152,7 @@ public class TeacherApi extends BaseApi {
         return message;
     }
 
-    @ApiOperation(value = "取得未被指派的助教名單",
+    @ApiOperation(value = "取得所有助教資訊",
             notes = "回傳所有助教資訊")
     @GetMapping(value = "/assistantList")
     private Message getAssistantList() {
@@ -162,6 +162,20 @@ public class TeacherApi extends BaseApi {
         } catch (Exception e) {
             e.printStackTrace();
             message = new Message(ApiMessageCode.GET_ASSISTANT_LIST_ERROR, "");
+        }
+        return message;
+    }
+
+    @ApiOperation(value = "取得未被指派的助教名單",
+            notes = "取得未被指派的助教名單")
+    @GetMapping(value = "/unassignAssistantList")
+    private Message unassignAssistantList(String courseId) {
+        Message message;
+        try {
+            message = new Message(ApiMessageCode.SUCCESS_STATUS, assistantService.findunassignAssistantInfoByCourseId(Long.parseLong(courseId)));
+        } catch (Exception e) {
+            e.printStackTrace();
+            message = new Message(ApiMessageCode.GET_UNASSIGNASSISTANT_LIST_ERROR, "");
         }
         return message;
     }

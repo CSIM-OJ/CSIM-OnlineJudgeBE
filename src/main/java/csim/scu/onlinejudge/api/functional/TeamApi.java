@@ -80,8 +80,40 @@ public class TeamApi extends BaseApi {
         return message;
     }
 
+    @ApiOperation(value = "取得此學生是否已經被互評完成",
+            notes = "取得problemId、account，來取得此學生是否已經被互評完成")
+    @GetMapping(value = "/checkCorrectedStatus")
+    public Message checkCorrectedStatus(String problemId, HttpSession session) {
+        String account = getUserAccount(session);
+        Message message;
+        try {
+            Map<String, Boolean> result = teamManager.checkCorrectedStatus(problemId, account);
+            message = new Message(ApiMessageCode.SUCCESS_STATUS, result);
+        } catch (EntityNotFoundException e) {
+            e.printStackTrace();
+            message = new Message(ApiMessageCode.CHECK_CORRECTED_STATUS_ERROR, "");
+        }
+        return message;
+    }
+
     @ApiOperation(value = "取得此學生批改對方的資訊",
             notes = "取得problemId、account，來取得此學生批改對方的資訊")
+    @GetMapping(value = "/correctInfo")
+    public Message correctInfo(String problemId, HttpSession session) {
+        String account = getUserAccount(session);
+        Message message;
+        try {
+            List<Map<String, Object>> result = teamManager.correctInfo(problemId, account);
+            message = new Message(ApiMessageCode.SUCCESS_STATUS, result);
+        } catch (EntityNotFoundException e) {
+            e.printStackTrace();
+            message = new Message(ApiMessageCode.CORRECTED_INFO_ERROR, "");
+        }
+        return message;
+    }
+
+    @ApiOperation(value = "取得此學生被批改的資訊",
+            notes = "取得problemId、account，來取得此學生被批改的資訊")
     @GetMapping(value = "/correctedInfo")
     public Message correctedInfo(String problemId, HttpSession session) {
         String account = getUserAccount(session);
@@ -91,7 +123,7 @@ public class TeamApi extends BaseApi {
             message = new Message(ApiMessageCode.SUCCESS_STATUS, result);
         } catch (EntityNotFoundException e) {
             e.printStackTrace();
-            message = new Message(ApiMessageCode.CORRECTED_INFO_ERROR, "");
+            message = new Message(ApiMessageCode.CORRECT_INFO_ERROR, "");
         }
         return message;
     }
@@ -110,6 +142,21 @@ public class TeamApi extends BaseApi {
         } catch (EntityNotFoundException e) {
             e.printStackTrace();
             message = new Message(ApiMessageCode.SUBMIT_CORRECT_ERROR, "");
+        }
+        return message;
+    }
+
+    @ApiOperation(value = "取得互評成績",
+            notes = "取得互評成績")
+    @GetMapping(value = "/discussScore")
+    public Message correctedInfo(String problemId) {
+        Message message;
+        try {
+            List<Map<String, Object>> result = teamManager.discussScore(problemId);
+            message = new Message(ApiMessageCode.SUCCESS_STATUS, result);
+        } catch (EntityNotFoundException e) {
+            e.printStackTrace();
+            message = new Message(ApiMessageCode.DISCUSS_SCORE_ERROR, "");
         }
         return message;
     }

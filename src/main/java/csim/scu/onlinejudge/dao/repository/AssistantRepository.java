@@ -1,6 +1,7 @@
 package csim.scu.onlinejudge.dao.repository;
 
 import csim.scu.onlinejudge.dao.domain.assistant.Assistant;
+import csim.scu.onlinejudge.dao.domain.assistant.AssistantInfo;
 import csim.scu.onlinejudge.dao.repository.base.BaseRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -25,6 +26,9 @@ public interface AssistantRepository extends BaseRepository<Assistant, Long> {
                                            @Param("oriPassword")String oriPassword,
                                            @Param("newPassword")String newPassword);
 
-    @Query("select a.account from Assistant a inner join a.courses as c where c.id=:courseId")
-    List<String> findAssistantAccountByCourseId(@Param("courseId") Long courseId);
+    @Query("select new csim.scu.onlinejudge.dao.domain.assistant.AssistantInfo(a.account, a.name) from Assistant a inner join a.courses as c where c.id=:courseId")
+    List<AssistantInfo> findAssistantInfoByCourseId(@Param("courseId") Long courseId);
+
+    @Query("select new csim.scu.onlinejudge.dao.domain.assistant.AssistantInfo(a.account, a.name) from Assistant a inner join a.courses as c where not c.id=:courseId")
+    List<AssistantInfo> findunassignAssistantInfoByCourseId(@Param("courseId") Long courseId);
 }

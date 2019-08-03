@@ -19,4 +19,5 @@ public interface TeamService extends BaseService<Team, Long> {
     public List<Team> findByProblem(Problem problem);
 
     public Team findByProblemAndAccount(Problem problem, String account) throws EntityNotFoundException;
+
 }
