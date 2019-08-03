@@ -1,6 +1,5 @@
 package csim.scu.onlinejudge.api.functional;
 
-import com.sun.org.apache.xerces.internal.xs.datatypes.ObjectList;
 import csim.scu.onlinejudge.api.base.BaseApi;
 import csim.scu.onlinejudge.common.exception.EntityNotFoundException;
 import csim.scu.onlinejudge.common.message.ApiMessageCode;
