@@ -82,4 +82,9 @@ public class TeamServiceImpl extends BaseServiceImpl<Team, Long> implements Team
         return teamRepository.findByProblemAndAccount(problem, account).orElseThrow(EntityNotFoundException::new);
     }
 
+    @Override
+    public boolean existsByProblemAndAccount(Problem problem, String account) {
+        return teamRepository.existsByProblemAndAccount(problem, account);
+    }
+
 }

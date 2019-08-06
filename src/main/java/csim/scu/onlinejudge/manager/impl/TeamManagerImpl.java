@@ -1,12 +1,12 @@
 package csim.scu.onlinejudge.manager.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import csim.scu.onlinejudge.common.exception.EntityNotFoundException;
 import csim.scu.onlinejudge.dao.domain.course.Course;
 import csim.scu.onlinejudge.dao.domain.judge.Judge;
 import csim.scu.onlinejudge.dao.domain.problem.Problem;
 import csim.scu.onlinejudge.dao.domain.student.Student;
-import csim.scu.onlinejudge.dao.domain.team.CommentResult;
-import csim.scu.onlinejudge.dao.domain.team.Team;
+import csim.scu.onlinejudge.dao.domain.team.*;
 import csim.scu.onlinejudge.manager.TeamManager;
 import csim.scu.onlinejudge.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,19 +84,12 @@ public class TeamManagerImpl implements TeamManager {
     @Override
     public Map<String, Boolean> checkCorrectedStatus(String problemId, String account) throws EntityNotFoundException {
         Problem problem = problemService.findById(Long.parseLong(problemId));
-        List<Team> correctTeam = teamService.findByProblem(problem);
-        int count = 0;
-        for (Team team : correctTeam) {
-            if (team.getCorrectedAccount().contains(account)) {
-                count++;
-            }
-        }
         Team team = teamService.findByProblemAndAccount(problem, account);
         int length = team.getCommentResult().size();
 
         Map<String, Boolean> result = new HashMap<>();
         boolean status = false;
-        if (count == length) {
+        if (length > 0) {
             status = true;
         }
         result.put("status", status);
@@ -122,12 +115,12 @@ public class TeamManagerImpl implements TeamManager {
                     Map<String, Object> commentResultMap = new HashMap<>();
                     commentResultMap.put("studentAccount", correctedAccount);
                     commentResultMap.put("code", code);
-                    commentResultMap.put("score", commentResult.getScore());
                     commentResultMap.put("correctValue", commentResult.getCorrectValue());
                     commentResultMap.put("readValue", commentResult.getReadValue());
                     commentResultMap.put("skillValue", commentResult.getSkillValue());
                     commentResultMap.put("completeValue", commentResult.getCompleteValue());
                     commentResultMap.put("wholeValue", commentResult.getWholeValue());
+                    commentResultMap.put("comment", commentResult.getComment());
                     result.add(commentResultMap);
                 }
             }
@@ -138,17 +131,20 @@ public class TeamManagerImpl implements TeamManager {
     @Override
     public List<Map<String, Object>> correctedInfo(String problemId, String account) throws EntityNotFoundException {
         Problem problem = problemService.findById(Long.parseLong(problemId));
-        Team team = teamService.findByProblemAndAccount(problem, account);
+        boolean isExist = teamService.existsByProblemAndAccount(problem, account);
         List<Map<String, Object>> result = new ArrayList<>();
-        for (CommentResult commentResult : team.getCommentResult()) {
-            Map<String, Object> commentResultMap = new HashMap<>();
-            commentResultMap.put("score", commentResult.getScore());
-            commentResultMap.put("correctValue", commentResult.getCorrectValue());
-            commentResultMap.put("readValue", commentResult.getReadValue());
-            commentResultMap.put("skillValue", commentResult.getSkillValue());
-            commentResultMap.put("completeValue", commentResult.getCompleteValue());
-            commentResultMap.put("wholeValue", commentResult.getWholeValue());
-            result.add(commentResultMap);
+        if (isExist) {
+            Team team = teamService.findByProblemAndAccount(problem, account);
+            for (CommentResult commentResult : team.getCommentResult()) {
+                Map<String, Object> commentResultMap = new HashMap<>();
+                commentResultMap.put("correctValue", commentResult.getCorrectValue());
+                commentResultMap.put("readValue", commentResult.getReadValue());
+                commentResultMap.put("skillValue", commentResult.getSkillValue());
+                commentResultMap.put("completeValue", commentResult.getCompleteValue());
+                commentResultMap.put("wholeValue", commentResult.getWholeValue());
+                commentResultMap.put("comment", commentResult.getComment());
+                result.add(commentResultMap);
+            }
         }
         return result;
     }
@@ -162,14 +158,15 @@ public class TeamManagerImpl implements TeamManager {
             Team team = teamService.findByProblemAndAccount(problem, correctedAccount);
             List<CommentResult> commentResults = team.getCommentResult();
 
-            int score = (int) map.get("score");
-            int correctValue = (int) map.get("correctValue");
-            int readValue = (int) map.get("readValue");
-            int skillValue = (int) map.get("skillValue");
-            int completeValue = (int) map.get("completeValue");
-            int wholeValue = (int) map.get("wholeValue");
-            CommentResult commentResult = new CommentResult(account, score,
-                    correctValue, readValue, skillValue, completeValue, wholeValue);
+            ObjectMapper mapper = new ObjectMapper();
+            CorrectValue correctValue = mapper.convertValue(map.get("correctValue"), CorrectValue.class);
+            ReadValue readValue = mapper.convertValue(map.get("readValue"), ReadValue.class);
+            SkillValue skillValue = mapper.convertValue(map.get("skillValue"), SkillValue.class);
+            CompleteValue completeValue = mapper.convertValue(map.get("completeValue"), CompleteValue.class);
+            WholeValue wholeValue = mapper.convertValue(map.get("wholeValue"), WholeValue.class);
+            String comment = (String) map.get("comment");
+            CommentResult commentResult = new CommentResult(account,
+                    correctValue, readValue, skillValue, completeValue, wholeValue, comment);
             commentResults.add(commentResult);
             team.setCommentResult(commentResults);
             teams.add(team);
@@ -201,11 +198,12 @@ public class TeamManagerImpl implements TeamManager {
             List<Map<String, Object>> commentResultList = new ArrayList<>();
             for (CommentResult commentResult : commentResults) {
                 String studentAccount = commentResult.getAccount();
-                double correctValue = commentResult.getCorrectValue();
-                double readValue = commentResult.getReadValue();
-                double skillValue = commentResult.getSkillValue();
-                double completeValue = commentResult.getCompleteValue();
-                double wholeValue = commentResult.getWholeValue();
+                CorrectValue correctValue = commentResult.getCorrectValue();
+                ReadValue readValue = commentResult.getReadValue();
+                SkillValue skillValue = commentResult.getSkillValue();
+                CompleteValue completeValue = commentResult.getCompleteValue();
+                WholeValue wholeValue = commentResult.getWholeValue();
+                String comment = commentResult.getComment();
 
                 Map<String, Object> commentResultMap = new HashMap<>();
                 commentResultMap.put("studentAccount", studentAccount);
@@ -214,6 +212,7 @@ public class TeamManagerImpl implements TeamManager {
                 commentResultMap.put("skillValue", skillValue);
                 commentResultMap.put("completeValue", completeValue);
                 commentResultMap.put("wholeValue", wholeValue);
+                commentResultMap.put("comment", comment);
                 commentResultList.add(commentResultMap);
             }
             Map<String, Object> map = new HashMap<>();
