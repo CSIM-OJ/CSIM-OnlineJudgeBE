@@ -158,7 +158,6 @@ public class StudentApi extends BaseApi {
         return message;
     }
 
-    // todo
     @ApiOperation(value = "取得學號的學生資料",
             notes = "取得學號的學生資料")
     @PostMapping(value = "/accountInfo")
