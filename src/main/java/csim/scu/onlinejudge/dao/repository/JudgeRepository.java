@@ -1,5 +1,6 @@
 package csim.scu.onlinejudge.dao.repository;
 
+import csim.scu.onlinejudge.dao.domain.course.Course;
 import csim.scu.onlinejudge.dao.domain.judge.Judge;
 import csim.scu.onlinejudge.dao.domain.problem.Problem;
 import csim.scu.onlinejudge.dao.domain.student.Student;
@@ -36,4 +37,8 @@ public interface JudgeRepository extends BaseRepository<Judge, Long> {
     List<Judge> findByStudent(Student student);
 
     int countByProblem(Problem problem);
+
+    @Query("select j from Judge j where j.problem.course=:course and j.student=:student")
+    List<Judge> findByCourseAndStudent(@Param("course") Course course,
+                                       @Param("student") Student student);
 }

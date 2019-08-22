@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +67,7 @@ public class TeamApi extends BaseApi {
     @ApiOperation(value = "取得此學生是否已經完成互評",
             notes = "取得problemId、account，來取得此學生是否已經完成互評")
     @GetMapping(value = "/checkCorrectStatus")
-    public Message checkCorrectStatus(String problemId, HttpSession session) {
+    private Message checkCorrectStatus(String problemId, HttpSession session, HttpServletRequest request) {
         String account = getUserAccount(session);
         Message message;
         try {

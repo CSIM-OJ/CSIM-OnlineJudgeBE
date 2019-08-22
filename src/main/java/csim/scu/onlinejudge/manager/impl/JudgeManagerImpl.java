@@ -294,7 +294,7 @@ public class JudgeManagerImpl implements JudgeManager {
 
         Map<Student, Integer> original = new HashMap<>();
         for (Student student : students) {
-            List<Judge> judges = student.getJudges();
+            List<Judge> judges = judgeService.findByCourseAndStudent(course, student);
             int count = 0;
             for (Judge judge : judges) {
                 int lastIndex = judge.getHistoryCodes().size() - 1;

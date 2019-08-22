@@ -89,7 +89,7 @@ public class Executor {
         try {
             for (int i = 0; i < codes.length; i++) {
                 String path = judgeData.getCodeFilePath()[i] + codeFileName;
-                FileUtils.writeStringToFile(new File(path), codes[i], encoding);
+                FileUtils.writeStringToFile(new File(path), codes[i], "UTF-8");
             }
 
             JudgeBehaviorFactory factory = new JudgeBehaviorFactory();

@@ -1,6 +1,7 @@
 package csim.scu.onlinejudge.service;
 
 import csim.scu.onlinejudge.common.exception.EntityNotFoundException;
+import csim.scu.onlinejudge.dao.domain.course.Course;
 import csim.scu.onlinejudge.dao.domain.judge.Judge;
 import csim.scu.onlinejudge.dao.domain.problem.Problem;
 import csim.scu.onlinejudge.dao.domain.student.Student;
@@ -25,4 +26,6 @@ public interface JudgeService extends BaseService<Judge, Long> {
     List<Judge> findByStudent(Student student);
 
     int countByProblem(Problem problem);
+
+    List<Judge> findByCourseAndStudent(Course course, Student student);
 }
