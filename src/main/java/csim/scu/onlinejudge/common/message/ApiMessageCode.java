@@ -63,8 +63,10 @@ public enum ApiMessageCode {
     CORRECT_INFO_ERROR("404", "取得此學生批改對方的資訊失敗"),
     CORRECTED_INFO_ERROR("404", "取得此學生被批改的資訊失敗"),
     SUBMIT_CORRECT_ERROR("404", "送出評分資訊失敗"),
-    DISCUSS_SCORE_ERROR("404", "取得互評成績失敗");
-    
+    DISCUSS_SCORE_ERROR("404", "取得互評成績失敗"),
+    // Not authorized
+    NOT_AUTHORIZED("403", "你的權限不足，無法進行該存取");
+
     private String code;
     private String desc;
 

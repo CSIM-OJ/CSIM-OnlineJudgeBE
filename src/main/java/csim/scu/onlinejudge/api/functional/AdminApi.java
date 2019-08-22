@@ -7,10 +7,7 @@ import csim.scu.onlinejudge.service.StudentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -34,6 +31,13 @@ public class AdminApi {
         Message message;
         List<Map<String, String>> studentDatas = (List<Map<String, String>>) map.get("studentDatas");
         studentService.saveAllStudent(studentDatas);
+        message = new Message(ApiMessageCode.SUCCESS_STATUS, "");
+        return message;
+    }
+
+    @GetMapping("/test")
+    private Message test(Map<String, Object> map) {
+        Message message;
         message = new Message(ApiMessageCode.SUCCESS_STATUS, "");
         return message;
     }
