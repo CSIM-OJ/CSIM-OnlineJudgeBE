@@ -3,6 +3,7 @@ package csim.scu.onlinejudge.service;
 import csim.scu.onlinejudge.common.exception.EntityNotFoundException;
 import csim.scu.onlinejudge.dao.domain.course.Course;
 import csim.scu.onlinejudge.dao.domain.student.Student;
+import csim.scu.onlinejudge.dao.domain.student.StudentInfo;
 import csim.scu.onlinejudge.service.base.BaseService;
 
 import java.util.List;
@@ -29,4 +30,6 @@ public interface StudentService extends BaseService<Student, Long> {
     List<String> findDistinctStudentClassByCourseId(Long courseId);
 
     List<String> findStudentAccountByCourseId(Long courseId);
+
+    List<StudentInfo> findByAccounts(List<String> accounts);
 }

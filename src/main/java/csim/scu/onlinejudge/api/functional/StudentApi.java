@@ -8,12 +8,14 @@ import csim.scu.onlinejudge.manager.CommonManager;
 import csim.scu.onlinejudge.manager.CourseManager;
 import csim.scu.onlinejudge.manager.JudgeManager;
 import csim.scu.onlinejudge.manager.ProblemManager;
+import csim.scu.onlinejudge.service.StudentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Map;
 
 @Api(value = "StudentApi", description = "學生的相關Api")
@@ -25,16 +27,19 @@ public class StudentApi extends BaseApi {
     private CourseManager courseManager;
     private JudgeManager judgeManager;
     private ProblemManager problemManager;
+    private StudentService studentService;
 
     @Autowired
     public StudentApi(CommonManager commonManager,
                       CourseManager courseManager,
                       JudgeManager judgeManager,
-                      ProblemManager problemManager) {
+                      ProblemManager problemManager,
+                      StudentService studentService) {
         this.commonManager = commonManager;
         this.courseManager = courseManager;
         this.judgeManager = judgeManager;
         this.problemManager = problemManager;
+        this.studentService = studentService;
     }
 
     @ApiOperation(value = "更改學生密碼",
@@ -150,6 +155,16 @@ public class StudentApi extends BaseApi {
     private Message allStudent(String courseId) {
         Message message;
         message = new Message(ApiMessageCode.SUCCESS_STATUS, courseManager.findAllStudentAccountByCourseId(Long.parseLong(courseId)));
+        return message;
+    }
+
+    // todo
+    @ApiOperation(value = "取得學號的學生資料",
+            notes = "取得學號的學生資料")
+    @PostMapping(value = "/accountInfo")
+    private Message accountInfo(@RequestBody List<String> accounts) {
+        Message message;
+        message = new Message(ApiMessageCode.SUCCESS_STATUS, studentService.findByAccounts(accounts));
         return message;
     }
 }

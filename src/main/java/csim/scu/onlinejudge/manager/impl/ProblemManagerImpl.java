@@ -42,7 +42,7 @@ public class ProblemManagerImpl implements ProblemManager {
 
     // 根據課程Id、學生account，取得學生擁有的題目資訊(含作答及未作答)
     @Override
-    public List<Map<String, String>> getStudentProblemInfo(Long courseId, String type, boolean isJudge, String account) throws EntityNotFoundException {
+    public List<Map<String, Object>> getStudentProblemInfo(Long courseId, String type, boolean isJudge, String account) throws EntityNotFoundException {
         Course course = courseService.findById(courseId);
         Student student = studentService.findByAccount(account);
         List<Problem> problems;
@@ -69,15 +69,16 @@ public class ProblemManagerImpl implements ProblemManager {
                 }
             }
         }
-        List<Map<String, String>> results = new ArrayList<>();
+        List<Map<String, Object>> results = new ArrayList<>();
         for (Problem problem : realProblems) {
-            Map<String, String> map = new HashMap<>();
+            Map<String, Object> map = new HashMap<>();
             map.put("problemId", String.valueOf(problem.getId()));
             map.put("name", problem.getName());
             map.put("type", problem.getType());
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             map.put("deadline", df.format(problem.getDeadline()));
             map.put("rate", String.valueOf(problem.getRate()));
+            map.put("tag", problem.getTag());
             results.add(map);
         }
         return results;

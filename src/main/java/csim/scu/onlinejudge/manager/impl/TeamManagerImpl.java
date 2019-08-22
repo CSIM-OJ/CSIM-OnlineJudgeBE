@@ -226,4 +226,93 @@ public class TeamManagerImpl implements TeamManager {
         }
         return result;
     }
+
+    @Override
+    public List<Map<String, Object>> teacherCorrectInfo(String problemId) throws EntityNotFoundException {
+        Problem problem = problemService.findById(Long.parseLong(problemId));
+        List<Team> teams = teamService.findByProblem(problem);
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (Team team : teams) {
+            Map<String, Object> map = new HashMap<>();
+            String account = team.getAccount();
+            Student student = studentService.findByAccount(account);
+            boolean isJudged = judgeService.existByProblemAndStudent(problem, student);
+            String code = "";
+            if (isJudged) {
+                Judge judge = judgeService.findByProblemAndStudent(problem, student);
+                code = judge.getHistoryCodes().get(judge.getHistoryCodes().size() - 1).getCode();
+            }
+            boolean isTrJudged = true;
+            if (team.getTeacherCommentResult() == null) {
+                isTrJudged = false;
+            }
+            int score = 0;
+            String comment = "";
+            Map<String, Object> correctValue = new HashMap<>();
+            Map<String, Object> readValue = new HashMap<>();
+            Map<String, Object> skillValue = new HashMap<>();
+            Map<String, Object> completeValue = new HashMap<>();
+            Map<String, Object> wholeValue = new HashMap<>();
+            String totalComment = "";
+            if (isTrJudged) {
+                CommentResult commentResult = team.getTeacherCommentResult();
+                correctValue.put("score", commentResult.getCorrectValue().getScore());
+                correctValue.put("comment", commentResult.getCorrectValue().getComment());
+                readValue.put("score", commentResult.getReadValue().getScore());
+                readValue.put("comment", commentResult.getReadValue().getComment());
+                skillValue.put("score", commentResult.getSkillValue().getScore());
+                skillValue.put("comment", commentResult.getSkillValue().getComment());
+                completeValue.put("score", commentResult.getCompleteValue().getScore());
+                completeValue.put("comment", commentResult.getCompleteValue().getComment());
+                wholeValue.put("score", commentResult.getWholeValue().getScore());
+                wholeValue.put("comment", commentResult.getWholeValue().getComment());
+                totalComment = commentResult.getComment();
+            }
+            else {
+                correctValue.put("score", score);
+                correctValue.put("comment", comment);
+                readValue.put("score", score);
+                readValue.put("comment", comment);
+                skillValue.put("score", score);
+                skillValue.put("comment", comment);
+                completeValue.put("score", score);
+                completeValue.put("comment", comment);
+                wholeValue.put("score", score);
+                wholeValue.put("comment", comment);
+            }
+            map.put("studentAccount", account);
+            map.put("code", code);
+            map.put("isJudged", isJudged);
+            map.put("isTrJudged", isTrJudged);
+            map.put("correctValue", correctValue);
+            map.put("readValue", readValue);
+            map.put("skillValue", skillValue);
+            map.put("completeValue", completeValue);
+            map.put("wholeValue", wholeValue);
+            map.put("comment", totalComment);
+            result.add(map);
+        }
+        return result;
+    }
+
+    @Override
+    public void teacherSubmitCorrect(String teacherAccount, String problemId, List<Map<String, Object>> correctedList) throws EntityNotFoundException {
+        Problem problem = problemService.findById(Long.parseLong(problemId));
+        for (Map<String, Object> map : correctedList) {
+            String account = map.get("correctedAccount").toString();
+            ObjectMapper mapper = new ObjectMapper();
+            CorrectValue correctValue = mapper.convertValue(map.get("correctValue"), CorrectValue.class);
+            ReadValue readValue = mapper.convertValue(map.get("readValue"), ReadValue.class);
+            SkillValue skillValue = mapper.convertValue(map.get("skillValue"), SkillValue.class);
+            CompleteValue completeValue = mapper.convertValue(map.get("completeValue"), CompleteValue.class);
+            WholeValue wholeValue = mapper.convertValue(map.get("wholeValue"), WholeValue.class);
+            String comment = map.get("comment").toString();
+            Team team = teamService.findByProblemAndAccount(problem, account);
+            CommentResult commentResult = new CommentResult(teacherAccount,
+                    correctValue, readValue, skillValue,
+                    completeValue, wholeValue, comment);
+            team.setTeacherCommentResult(commentResult);
+            teamService.save(team);
+        }
+    }
 }

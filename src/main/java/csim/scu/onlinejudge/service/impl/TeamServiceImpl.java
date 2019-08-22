@@ -42,7 +42,7 @@ public class TeamServiceImpl extends BaseServiceImpl<Team, Long> implements Team
         for (Map<String, String> pair : pairs) {
             String correctAccount = pair.get("correctAccount");
             if (!correctAccounts.contains(correctAccount)) {
-                Team team = new Team(problem, correctAccount, new ArrayList<>(), new ArrayList<>());
+                Team team = new Team(problem, correctAccount, new ArrayList<>(), new ArrayList<>(), null);
                 teams.add(team);
                 correctAccounts.add(correctAccount);
             }

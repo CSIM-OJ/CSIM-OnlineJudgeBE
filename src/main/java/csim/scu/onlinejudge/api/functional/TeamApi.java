@@ -160,4 +160,38 @@ public class TeamApi extends BaseApi {
         }
         return message;
     }
+
+    @ApiOperation(value = "老師取得此討論題學生的批改資訊",
+            notes = "老師取得此討論題學生的批改資訊")
+    @GetMapping(value = "/teacher/correctInfo")
+    public Message teacherCorrectInfo(String problemId) {
+        Message message;
+        try {
+            List<Map<String, Object>> result = teamManager.teacherCorrectInfo(problemId);
+            message = new Message(ApiMessageCode.SUCCESS_STATUS, result);
+        } catch (EntityNotFoundException e) {
+            e.printStackTrace();
+            message = new Message(ApiMessageCode.DISCUSS_SCORE_ERROR, "");
+        }
+        return message;
+    }
+
+    @ApiOperation(value = "老師取得此討論題學生的批改資訊",
+            notes = "老師取得此討論題學生的批改資訊")
+    @PostMapping(value = "/teacher/submitCorrect")
+    public Message teacherSubmitCorrect(@RequestBody Map<String, Object> map, HttpSession session) {
+        String teacherAccount = getUserAccount(session);
+        String problemId = map.get("problemId").toString();
+        List<Map<String, Object>> correctedList = (List<Map<String, Object>>) map.get("correctedList");
+
+        Message message;
+        try {
+            teamManager.teacherSubmitCorrect(teacherAccount, problemId, correctedList);
+            message = new Message(ApiMessageCode.SUCCESS_STATUS, "");
+        } catch (EntityNotFoundException e) {
+            e.printStackTrace();
+            message = new Message(ApiMessageCode.DISCUSS_SCORE_ERROR, "");
+        }
+        return message;
+    }
 }

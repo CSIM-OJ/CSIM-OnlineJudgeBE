@@ -3,6 +3,7 @@ package csim.scu.onlinejudge.service.impl;
 import csim.scu.onlinejudge.common.exception.EntityNotFoundException;
 import csim.scu.onlinejudge.dao.domain.course.Course;
 import csim.scu.onlinejudge.dao.domain.student.Student;
+import csim.scu.onlinejudge.dao.domain.student.StudentInfo;
 import csim.scu.onlinejudge.dao.repository.StudentRepository;
 import csim.scu.onlinejudge.dao.repository.base.BaseRepository;
 import csim.scu.onlinejudge.service.StudentService;
@@ -101,5 +102,10 @@ public class StudentServiceImpl extends BaseServiceImpl<Student, Long> implement
     @Override
     public List<String> findStudentAccountByCourseId(Long courseId) {
         return studentRepository.findAccountByCourseId(courseId);
+    }
+
+    @Override
+    public List<StudentInfo> findByAccounts(List<String> accounts) {
+        return studentRepository.findByAccountIn(accounts);
     }
 }

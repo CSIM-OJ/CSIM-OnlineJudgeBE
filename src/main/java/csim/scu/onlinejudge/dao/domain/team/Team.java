@@ -33,11 +33,15 @@ public class Team extends BaseEntity {
     @Type(type = "json")
     @Column(columnDefinition = "json")
     private List<CommentResult> commentResult;
+    @Type(type = "json")
+    @Column(columnDefinition = "json")
+    private CommentResult teacherCommentResult;
 
-    public Team(Problem problem, String account, List<String> correctedAccount, List<CommentResult> commentResult) {
+    public Team(Problem problem, String account, List<String> correctedAccount, List<CommentResult> commentResult, CommentResult teacherCommentResult) {
         this.problem = problem;
         this.account = account;
         this.correctedAccount = correctedAccount;
         this.commentResult = commentResult;
+        this.teacherCommentResult = teacherCommentResult;
     }
 }

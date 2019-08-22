@@ -21,4 +21,8 @@ public interface TeamManager {
     public void submitCorrect(String problemId, String account, List<Map<String, Object>> commentList) throws EntityNotFoundException;
 
     public List<Map<String, Object>> discussScore(String problemId) throws EntityNotFoundException;
+
+    public List<Map<String, Object>> teacherCorrectInfo(String problemId) throws EntityNotFoundException;
+
+    public void teacherSubmitCorrect(String teacherAccount, String problemId, List<Map<String, Object>> correctedList) throws EntityNotFoundException;
 }

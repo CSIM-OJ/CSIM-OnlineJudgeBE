@@ -2,6 +2,7 @@ package csim.scu.onlinejudge.dao.repository;
 
 import csim.scu.onlinejudge.dao.domain.course.Course;
 import csim.scu.onlinejudge.dao.domain.student.Student;
+import csim.scu.onlinejudge.dao.domain.student.StudentInfo;
 import csim.scu.onlinejudge.dao.repository.base.BaseRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -38,4 +39,6 @@ public interface StudentRepository extends BaseRepository<Student, Long> {
 
     @Query("select s.account from Student s inner join s.courses as c where c.id=:courseId")
     List<String> findAccountByCourseId(@Param("courseId") Long courseId);
+
+    List<StudentInfo> findByAccountIn(List<String> accounts);
 }
