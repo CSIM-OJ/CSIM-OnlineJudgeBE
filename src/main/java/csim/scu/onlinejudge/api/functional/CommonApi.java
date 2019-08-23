@@ -57,20 +57,20 @@ public class CommonApi extends BaseApi {
 //        return message;
 //    }
 
-    @ApiOperation(value = "使用者登出",
-            notes = "將使用者登出，清除session")
-    @PostMapping(value = "/logout")
-    private Message logout(HttpSession session) {
-        Message message;
-        if (isLogin(session)) {
-            destroySession(session);
-            message = new Message(ApiMessageCode.SUCCESS_STATUS, "");
-        }
-        else {
-            message = new Message(ApiMessageCode.LOGOUT_ERROR, "");
-        }
-        return message;
-    }
+//    @ApiOperation(value = "使用者登出",
+//            notes = "將使用者登出，清除session")
+//    @PostMapping(value = "/logout")
+//    private Message logout(HttpSession session) {
+//        Message message;
+//        if (isLogin(session)) {
+//            destroySession(session);
+//            message = new Message(ApiMessageCode.SUCCESS_STATUS, "");
+//        }
+//        else {
+//            message = new Message(ApiMessageCode.LOGOUT_ERROR, "");
+//        }
+//        return message;
+//    }
 
     @ApiOperation(value = "檢查使用者登入狀態",
             notes = "檢查使用者的session是否還存在")

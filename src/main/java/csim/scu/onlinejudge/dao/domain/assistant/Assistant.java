@@ -36,7 +36,7 @@ public class Assistant extends AbstractUser implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("assistant"));
+        authorities.add(new SimpleGrantedAuthority("ROLE_assistant"));
         return authorities;
     }
 

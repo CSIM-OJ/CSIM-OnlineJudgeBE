@@ -27,7 +27,7 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
     public void onAuthenticationSuccess(HttpServletRequest req, HttpServletResponse resp, Authentication authentication) throws IOException, ServletException {
         String account = authentication.getName();
         Collection collection = authentication.getAuthorities();
-        String authority = collection.iterator().next().toString();
+        String authority = collection.iterator().next().toString().replace("ROLE_", "");
         HttpSession session = req.getSession();
         session.setAttribute(LOGGED_IN, account);
         session.setAttribute(USER_TYPE, authority);

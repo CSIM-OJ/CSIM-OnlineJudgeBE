@@ -31,7 +31,7 @@ public class Teacher extends AbstractUser implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("teacher"));
+        authorities.add(new SimpleGrantedAuthority("ROLE_teacher"));
         return authorities;
     }
 

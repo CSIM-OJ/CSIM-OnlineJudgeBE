@@ -45,7 +45,7 @@ public class Student extends AbstractUser implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("student"));
+        authorities.add(new SimpleGrantedAuthority("ROLE_student"));
         return authorities;
     }
 
