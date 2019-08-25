@@ -297,16 +297,16 @@ public class TeamManagerImpl implements TeamManager {
     }
 
     @Override
-    public void teacherSubmitCorrect(String teacherAccount, String problemId, Map<String, Object> correctedList) throws EntityNotFoundException {
+    public void teacherSubmitCorrect(String teacherAccount, String problemId, Map<String, Object> map) throws EntityNotFoundException {
         Problem problem = problemService.findById(Long.parseLong(problemId));
-        String account = correctedList.get("correctedAccount").toString();
+        String account = map.get("correctedAccount").toString();
         ObjectMapper mapper = new ObjectMapper();
-        CorrectValue correctValue = mapper.convertValue(correctedList.get("correctValue"), CorrectValue.class);
-        ReadValue readValue = mapper.convertValue(correctedList.get("readValue"), ReadValue.class);
-        SkillValue skillValue = mapper.convertValue(correctedList.get("skillValue"), SkillValue.class);
-        CompleteValue completeValue = mapper.convertValue(correctedList.get("completeValue"), CompleteValue.class);
-        WholeValue wholeValue = mapper.convertValue(correctedList.get("wholeValue"), WholeValue.class);
-        String comment = correctedList.get("comment").toString();
+        CorrectValue correctValue = mapper.convertValue(map.get("correctValue"), CorrectValue.class);
+        ReadValue readValue = mapper.convertValue(map.get("readValue"), ReadValue.class);
+        SkillValue skillValue = mapper.convertValue(map.get("skillValue"), SkillValue.class);
+        CompleteValue completeValue = mapper.convertValue(map.get("completeValue"), CompleteValue.class);
+        WholeValue wholeValue = mapper.convertValue(map.get("wholeValue"), WholeValue.class);
+        String comment = map.get("comment").toString();
         Team team = teamService.findByProblemAndAccount(problem, account);
         CommentResult commentResult = new CommentResult(teacherAccount,
                 correctValue, readValue, skillValue,

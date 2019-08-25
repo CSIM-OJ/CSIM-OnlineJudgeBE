@@ -182,11 +182,9 @@ public class TeamApi extends BaseApi {
     public Message teacherSubmitCorrect(@RequestBody Map<String, Object> map, HttpSession session) {
         String teacherAccount = getUserAccount(session);
         String problemId = map.get("problemId").toString();
-        Map<String, Object> correctedList = (Map<String, Object>) map.get("correctedList");
-
         Message message;
         try {
-            teamManager.teacherSubmitCorrect(teacherAccount, problemId, correctedList);
+            teamManager.teacherSubmitCorrect(teacherAccount, problemId, map);
             message = new Message(ApiMessageCode.SUCCESS_STATUS, "");
         } catch (EntityNotFoundException e) {
             e.printStackTrace();
