@@ -6,8 +6,9 @@ public enum ApiMessageCode {
     // CommonApi
     LOGIN_ERROR("404", "登入失敗"),
     LOGOUT_ERROR("404", "登出失敗"),
-    CHECK_LOGIN_ERROR("404", "檢查登入失敗"),
+    CHECK_LOGIN_ERROR("401", "檢查登入失敗"),
     CHANGE_PASSWORD_ERROR("404", "更改密碼失敗"),
+    NOT_LOGIN_ERROR("401", "請先登入才能進行此操作"),
     // StudentApi
     GET_COURSE_LIST_ERROR("404", "取得課程列表失敗"),
     GET_INFO_ERROR("404", "取得學生資訊失敗"),

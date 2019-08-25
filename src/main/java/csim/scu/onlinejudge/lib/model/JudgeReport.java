@@ -44,10 +44,12 @@ public class JudgeReport {
     }
 
     public double getAverageScore() {
-        double result = 0;
+        double averageScore = 0;
         for (JudgeProblemResult problemResult : getResults()) {
-            result += problemResult.getGrade();
+            averageScore += problemResult.getGrade();
         }
-        return result / getResults().size();
+        DecimalFormat format = new DecimalFormat("#.##");
+        String result = format.format(averageScore / getResults().size());
+        return Double.parseDouble(result);
     }
 }

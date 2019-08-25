@@ -73,9 +73,8 @@ public class JudgeManagerImpl implements JudgeManager {
         Judger judger = JudgerFactory.createJudger(programLanguage, judgeData);
         assert judger != null;
         JudgeReport report = judger.performJudge();
-
         double avgRunTime = report.getAverageJudgeTimeForRoundOff2nd();
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String handDate = df.format(new Date());
         double avgScore = report.getAverageScore();
         double correctRate = 0;

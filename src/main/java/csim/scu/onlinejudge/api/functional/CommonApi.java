@@ -8,6 +8,8 @@ import csim.scu.onlinejudge.manager.CommonManager;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -75,22 +77,25 @@ public class CommonApi extends BaseApi {
     @ApiOperation(value = "檢查使用者登入狀態",
             notes = "檢查使用者的session是否還存在")
     @GetMapping(value = "/checkLogin")
-    private Message checkLogin(HttpSession session) {
+    private ResponseEntity<Message> checkLogin(HttpSession session) {
         Map<String, Object> map = new HashMap<>();
         Message message;
         String authority = "";
+        ResponseEntity<Message> response;
         if (isLogin(session)) {
             authority = getUserType(session);
             map.put("status", true);
             map.put("authority", authority);
             message = new Message(ApiMessageCode.SUCCESS_STATUS, map);
+            response = new ResponseEntity<>(message, HttpStatus.OK);
         }
         else {
             map.put("status", false);
             map.put("authority", authority);
             message = new Message(ApiMessageCode.CHECK_LOGIN_ERROR, map);
+            response = new ResponseEntity<>(message, HttpStatus.UNAUTHORIZED);
         }
-        return message;
+        return response;
     }
 
 }
