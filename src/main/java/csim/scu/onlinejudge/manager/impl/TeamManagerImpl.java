@@ -281,6 +281,7 @@ public class TeamManagerImpl implements TeamManager {
                 wholeValue.put("comment", comment);
             }
             map.put("studentAccount", account);
+            map.put("studentName", student.getName());
             map.put("code", code);
             map.put("isJudged", isJudged);
             map.put("isTrJudged", isTrJudged);
