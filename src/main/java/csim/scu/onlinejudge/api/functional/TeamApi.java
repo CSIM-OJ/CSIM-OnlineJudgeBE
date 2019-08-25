@@ -182,7 +182,7 @@ public class TeamApi extends BaseApi {
     public Message teacherSubmitCorrect(@RequestBody Map<String, Object> map, HttpSession session) {
         String teacherAccount = getUserAccount(session);
         String problemId = map.get("problemId").toString();
-        List<Map<String, Object>> correctedList = (List<Map<String, Object>>) map.get("correctedList");
+        Map<String, Object> correctedList = (Map<String, Object>) map.get("correctedList");
 
         Message message;
         try {
