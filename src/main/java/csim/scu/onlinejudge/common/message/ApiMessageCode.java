@@ -20,7 +20,8 @@ public enum ApiMessageCode {
     // TeacherApi
     CREATE_COURSE_ERROR("404", "創建課程失敗"),
     DELETE_COURSE_ERROR("404", "刪除課程失敗"),
-    MAP_STUDENTLIST_COURSE_ERROR("404", "學生列表配對課程失敗"),
+    MAP_STUDENTLIST_COURSE_ERROR_1("404", "找不到此學號的學生！"),
+    MAP_STUDENTLIST_COURSE_ERROR_2("404", "新增學生錯誤，可能有已加入的學生！"),
     DELETE_STUDENTLIST_COURSE_ERROR("404", "學生列表退出課程失敗"),
     MAP_ASSISTANTLIST_COURSE_ERROR("404", "助教列表配對課程失敗"),
     DELETE_ASSISTANTLIST_COURSE_ERROR("404", "助教列表退出課程失敗"),

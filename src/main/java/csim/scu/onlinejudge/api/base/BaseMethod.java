@@ -1,5 +1,6 @@
 package csim.scu.onlinejudge.api.base;
 
+import csim.scu.onlinejudge.common.exception.EntityExistsException;
 import csim.scu.onlinejudge.common.exception.EntityNotFoundException;
 import csim.scu.onlinejudge.common.message.ApiMessageCode;
 import csim.scu.onlinejudge.common.message.Message;
@@ -20,7 +21,9 @@ public class BaseMethod {
             message = new Message(ApiMessageCode.SUCCESS_STATUS, "");
         } catch (EntityNotFoundException e) {
             e.printStackTrace();
-            message = new Message(ApiMessageCode.MAP_STUDENTLIST_COURSE_ERROR, "");
+            message = new Message(ApiMessageCode.MAP_STUDENTLIST_COURSE_ERROR_1, "");
+        } catch (EntityExistsException e) {
+            message = new Message(ApiMessageCode.MAP_STUDENTLIST_COURSE_ERROR_2, "");
         }
         return message;
     }

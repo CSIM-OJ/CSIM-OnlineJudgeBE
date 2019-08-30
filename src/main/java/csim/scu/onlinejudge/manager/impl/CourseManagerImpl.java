@@ -1,5 +1,6 @@
 package csim.scu.onlinejudge.manager.impl;
 
+import csim.scu.onlinejudge.common.exception.EntityExistsException;
 import csim.scu.onlinejudge.common.exception.EntityNotFoundException;
 import csim.scu.onlinejudge.dao.domain.assistant.Assistant;
 import csim.scu.onlinejudge.dao.domain.assistant.AssistantInfo;
@@ -100,7 +101,7 @@ public class CourseManagerImpl implements CourseManager {
     // 根據學號列表將一群學生加入課程
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void mapStudentListToCourse(Long courseId, List<String> accounts) throws EntityNotFoundException {
+    public void mapStudentListToCourse(Long courseId, List<String> accounts) throws EntityNotFoundException, EntityExistsException {
         Course course = courseService.findById(courseId);
         List<Student> students = course.getStudents();
         for (String account : accounts) {
@@ -119,7 +120,7 @@ public class CourseManagerImpl implements CourseManager {
                 studentService.save(student);
             }
             else {
-                throw new EntityNotFoundException();
+                throw new EntityExistsException();
             }
         }
     }

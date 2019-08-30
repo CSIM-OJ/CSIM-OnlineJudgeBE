@@ -20,7 +20,7 @@ public interface CourseManager {
 
     void deleteCourseById(Long id) throws EntityNotFoundException;
 
-    void mapStudentListToCourse(Long courseId, List<String> accounts) throws EntityNotFoundException;
+    void mapStudentListToCourse(Long courseId, List<String> accounts) throws EntityNotFoundException, EntityExistsException;
 
     void deleteStudentListFromCourse(Long courseId, List<String> accounts) throws EntityNotFoundException;
 
