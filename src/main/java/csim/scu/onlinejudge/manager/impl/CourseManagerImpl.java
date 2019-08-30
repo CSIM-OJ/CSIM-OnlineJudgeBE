@@ -102,12 +102,25 @@ public class CourseManagerImpl implements CourseManager {
     @Override
     public void mapStudentListToCourse(Long courseId, List<String> accounts) throws EntityNotFoundException {
         Course course = courseService.findById(courseId);
+        List<Student> students = course.getStudents();
         for (String account : accounts) {
-            Student student = studentService.findByAccount(account);
-            List<Course> courses = student.getCourses();
-            courses.add(course);
-            student.setCourses(courses);
-            studentService.save(student);
+            boolean isExist = false;
+            for (Student student : students) {
+                if (account.equals(student.getAccount())) {
+                    isExist = true;
+                    break;
+                }
+            }
+            if (!isExist) {
+                Student student = studentService.findByAccount(account);
+                List<Course> courses = student.getCourses();
+                courses.add(course);
+                student.setCourses(courses);
+                studentService.save(student);
+            }
+            else {
+                throw new EntityNotFoundException();
+            }
         }
     }
 
