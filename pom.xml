@@ -8,16 +8,16 @@
 		<version>2.1.2.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>csim.scu</groupId>
-	<artifactId>onlinejudge</artifactId>
+	<groupId>com.penguin</groupId>
+	<artifactId>penguin-coco</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>onlinejudge</name>
+	<name>PenguinCoCoBE</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
 		<java.version>11</java.version>
         <skipTests>true</skipTests>
-        <docker.image.prefix>onlinejudge</docker.image.prefix>
+        <docker.image.prefix>penguinCoCo</docker.image.prefix>
 	</properties>
 
 
